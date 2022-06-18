@@ -12,9 +12,15 @@ namespace CardGame
 {
     public partial class Form1 : Form
     {
+
+        private Controller controller;
+
         public Form1()
         {
             InitializeComponent();
+            controller = new Controller(); 
         }
+
+        
     }
 }
