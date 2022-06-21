@@ -10,20 +10,22 @@ using System.Windows.Forms;
 
 namespace CardGame
 {
-    public partial class Form1 : Form
+    public partial class MainMenu : UserControl
     {
 
 
-        public Form1()
+        public MainMenu()
         {
+
             InitializeComponent();
-           
+
 
         }
 
-        private void texasHoldem1_Load(object sender, EventArgs e)
+        private void texasButton_Click(object sender, EventArgs e)
         {
-
+          
+            
         }
     }
 }

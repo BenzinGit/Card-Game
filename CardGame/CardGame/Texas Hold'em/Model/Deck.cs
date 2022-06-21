@@ -21,8 +21,7 @@ namespace CardGame
         {
 
             deck = new List<Card>();
-            setUpDeck(); 
-
+            setUpDeck();
         }
 
 
@@ -41,15 +40,50 @@ namespace CardGame
 
         public Card drawCard()
         {
-            Random rnd = new Random();
-            int num = rnd.Next(0,52 );
 
-            Card card = deck[num];
+            Card card = deck[0];
             deck.Remove(card);
 
             return card;
 
 
+
+
+        }
+
+        public int cardsLeft()
+        {
+            return deck.Count;
+        }
+
+
+
+        public void shuffleDeck()
+        {
+            Random random = new Random(); 
+
+
+            for (int i = 0; i < 52; i++)
+            {
+                int randNum = random.Next(0, deck.Count);
+                Card temp = deck[i];
+                deck[i] = deck[randNum];
+                deck[randNum] = temp;
+
+            }
+
+
+        }
+
+        public void printDeck()
+        {
+
+            foreach (var card in deck)
+            {
+
+                card.printCard();
+
+            }
 
 
         }

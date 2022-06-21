@@ -8,22 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace CardGame
+namespace CardGame.Texas_Hold_em.View
 {
-    public partial class Form1 : Form
+    public partial class PlayerControlGUI : UserControl
     {
-
-
-        public Form1()
+        public PlayerControlGUI()
         {
             InitializeComponent();
-           
-
-        }
-
-        private void texasHoldem1_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }
