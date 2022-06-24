@@ -17,9 +17,9 @@ namespace CardGame.Texas_Hold_em.View
             InitializeComponent();
         }
 
-        public void setPot(string cash)
+        public void setPot(int cash)
         {
-            pot.Text = cash; 
+            pot.Text = ("$"+cash.ToString()); 
 
         }
 

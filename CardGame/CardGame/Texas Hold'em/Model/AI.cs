@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace CardGame.Texas_Hold_em.Model
 {
-    internal class Pot
+    internal class AI
     {
 
-        public int pot = 0; 
+
 
     }
 }

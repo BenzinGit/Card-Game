@@ -1,4 +1,5 @@
 ﻿using CardGame.Texas_Hold_em.Controller;
+using CardGame.Texas_Hold_em.Model;
 using CardGame.Texas_Hold_em.View;
 using System;
 using System.Collections.Generic;
@@ -21,9 +22,10 @@ namespace CardGame.View
         public TexasHoldem()
         {
             InitializeComponent();
-            startGame();
 
+            startGame();
             controller = new Controller(this);
+            controller.setUpGame(); 
 
 
 
@@ -53,6 +55,8 @@ namespace CardGame.View
 
         }
 
+       
+
         public void displayTurn(string card)
         {
 
@@ -65,13 +69,47 @@ namespace CardGame.View
                community.setRiver(card); 
         }
 
+        internal void setUpGame(List<Player> players, int startingCash)
+        {
+
+            community.setPot(0);
+            int i = 0; 
+            foreach (var player in playerList)
+            {
+                player.playerCash.Text = ("$"+startingCash.ToString());
+                player.name.Text = players[i].Name;
+                i++; 
+            }
+
+        }
+
+        internal void displayDealer(int playerIndex)
+        {
+            foreach (var player in playerList)
+            {
+                player.dealerIcon.Visible = false; 
+            }
+
+            playerList[playerIndex].dealerIcon.Visible = true; 
+
+        }
+
+        public void updateBoard()
+        {
+            int i = 0;
+            foreach (var player in playerList)
+            {
+                playerList[i].setCash(controller.getPlayerCash(i));
+                playerList[i].setBet(controller.getPlayerBet(i));
+
+                i++; 
 
 
+            }
+
+            community.setPot(controller.getPot()); 
 
 
-
-
-
-
+        }
     }
 }

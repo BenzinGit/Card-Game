@@ -27,7 +27,12 @@ namespace CardGame.Texas_Hold_em.View
 
         public void setCash(int cash)
         {
-            playerCash.Text = cash.ToString(); 
+            playerCash.Text = ("$" + cash.ToString()); 
+        }
+
+        public void setBet(int bet)
+        {
+            playerBet.Text = ("$"+ bet.ToString());
         }
 
         public void turnCards()

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.log = new System.Windows.Forms.RichTextBox();
             this.playerControlGUI1 = new CardGame.Texas_Hold_em.View.PlayerControlGUI();
             this.community = new CardGame.Texas_Hold_em.View.community();
             this.playerGUI4 = new CardGame.Texas_Hold_em.View.PlayerGUI();
@@ -35,6 +36,15 @@
             this.playerGUI2 = new CardGame.Texas_Hold_em.View.PlayerGUI();
             this.playerGUI1 = new CardGame.Texas_Hold_em.View.PlayerGUI();
             this.SuspendLayout();
+            // 
+            // log
+            // 
+            this.log.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.log.Location = new System.Drawing.Point(912, 564);
+            this.log.Name = "log";
+            this.log.Size = new System.Drawing.Size(187, 67);
+            this.log.TabIndex = 6;
+            this.log.Text = "";
             // 
             // playerControlGUI1
             // 
@@ -94,6 +104,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DarkGreen;
+            this.Controls.Add(this.log);
             this.Controls.Add(this.playerControlGUI1);
             this.Controls.Add(this.community);
             this.Controls.Add(this.playerGUI4);
@@ -119,5 +130,6 @@
         private Texas_Hold_em.View.PlayerGUI playerGUI4;
         private Texas_Hold_em.View.community community;
         private Texas_Hold_em.View.PlayerControlGUI playerControlGUI1;
+        private System.Windows.Forms.RichTextBox log;
     }
 }

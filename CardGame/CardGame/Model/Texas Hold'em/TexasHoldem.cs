@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CardGame.Texas_Hold_em.Model
+namespace CardGame.Model.Texas_Hold_em
 {
-    internal class Pot
+    internal class TexasHoldem
     {
 
-        public int pot = 0; 
 
     }
 }

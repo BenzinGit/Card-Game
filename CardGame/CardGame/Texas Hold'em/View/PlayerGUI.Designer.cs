@@ -30,14 +30,15 @@
         {
             this.name = new System.Windows.Forms.Label();
             this.playerCash = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.bet = new System.Windows.Forms.Label();
             this.dealerIcon = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.betIcon = new System.Windows.Forms.PictureBox();
             this.card2 = new System.Windows.Forms.PictureBox();
             this.card1 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.playerBet = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dealerIcon)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.betIcon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.card2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.card1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -71,19 +72,18 @@
             this.playerCash.TabIndex = 3;
             this.playerCash.Text = "$1000";
             // 
-            // label1
+            // bet
             // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.Yellow;
-            this.label1.Location = new System.Drawing.Point(118, 0);
-            this.label1.Margin = new System.Windows.Forms.Padding(3);
-            this.label1.Name = "label1";
-            this.label1.Padding = new System.Windows.Forms.Padding(3);
-            this.label1.Size = new System.Drawing.Size(39, 25);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "$50";
+            this.bet.AutoSize = true;
+            this.bet.BackColor = System.Drawing.Color.Transparent;
+            this.bet.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bet.ForeColor = System.Drawing.Color.Yellow;
+            this.bet.Location = new System.Drawing.Point(118, 0);
+            this.bet.Margin = new System.Windows.Forms.Padding(3);
+            this.bet.Name = "bet";
+            this.bet.Padding = new System.Windows.Forms.Padding(3);
+            this.bet.Size = new System.Drawing.Size(6, 25);
+            this.bet.TabIndex = 8;
             // 
             // dealerIcon
             // 
@@ -95,16 +95,17 @@
             this.dealerIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.dealerIcon.TabIndex = 10;
             this.dealerIcon.TabStop = false;
+            this.dealerIcon.Visible = false;
             // 
-            // pictureBox2
+            // betIcon
             // 
-            this.pictureBox2.Image = global::CardGame.Properties.Resources.poker_chip__1_;
-            this.pictureBox2.Location = new System.Drawing.Point(77, -1);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(35, 31);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 9;
-            this.pictureBox2.TabStop = false;
+            this.betIcon.Image = global::CardGame.Properties.Resources.poker_chip__1_;
+            this.betIcon.Location = new System.Drawing.Point(77, -1);
+            this.betIcon.Name = "betIcon";
+            this.betIcon.Size = new System.Drawing.Size(35, 31);
+            this.betIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.betIcon.TabIndex = 9;
+            this.betIcon.TabStop = false;
             // 
             // card2
             // 
@@ -130,7 +131,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::CardGame.Properties.Resources.poker_chip__1_;
+            this.pictureBox1.Image = global::CardGame.Properties.Resources.man;
             this.pictureBox1.Location = new System.Drawing.Point(9, 36);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(50, 44);
@@ -138,14 +139,28 @@
             this.pictureBox1.TabIndex = 5;
             this.pictureBox1.TabStop = false;
             // 
+            // playerBet
+            // 
+            this.playerBet.AutoSize = true;
+            this.playerBet.BackColor = System.Drawing.Color.Transparent;
+            this.playerBet.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.playerBet.ForeColor = System.Drawing.Color.Gold;
+            this.playerBet.Location = new System.Drawing.Point(112, 3);
+            this.playerBet.Margin = new System.Windows.Forms.Padding(3);
+            this.playerBet.Name = "playerBet";
+            this.playerBet.Padding = new System.Windows.Forms.Padding(3);
+            this.playerBet.Size = new System.Drawing.Size(6, 25);
+            this.playerBet.TabIndex = 11;
+            // 
             // PlayerGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Transparent;
+            this.Controls.Add(this.playerBet);
             this.Controls.Add(this.dealerIcon);
-            this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.betIcon);
+            this.Controls.Add(this.bet);
             this.Controls.Add(this.card2);
             this.Controls.Add(this.card1);
             this.Controls.Add(this.name);
@@ -154,7 +169,7 @@
             this.Name = "PlayerGUI";
             this.Size = new System.Drawing.Size(173, 138);
             ((System.ComponentModel.ISupportInitialize)(this.dealerIcon)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.betIcon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.card2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.card1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -169,8 +184,9 @@
         public System.Windows.Forms.PictureBox card2;
         private System.Windows.Forms.PictureBox pictureBox1;
         public System.Windows.Forms.Label playerCash;
-        public System.Windows.Forms.Label label1;
-        private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.PictureBox dealerIcon;
+        public System.Windows.Forms.Label bet;
+        private System.Windows.Forms.PictureBox betIcon;
+        public System.Windows.Forms.PictureBox dealerIcon;
+        public System.Windows.Forms.Label playerBet;
     }
 }

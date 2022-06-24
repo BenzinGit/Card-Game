@@ -84,7 +84,6 @@
             // 
             // flop3
             // 
-            this.flop3.Image = global::CardGame.Properties.Resources._5_of_spades;
             this.flop3.Location = new System.Drawing.Point(233, 3);
             this.flop3.Name = "flop3";
             this.flop3.Size = new System.Drawing.Size(74, 93);
@@ -94,7 +93,6 @@
             // 
             // flop2
             // 
-            this.flop2.Image = global::CardGame.Properties.Resources._8_of_hearts;
             this.flop2.Location = new System.Drawing.Point(153, 3);
             this.flop2.Name = "flop2";
             this.flop2.Size = new System.Drawing.Size(74, 93);
@@ -104,7 +102,6 @@
             // 
             // flop1
             // 
-            this.flop1.Image = global::CardGame.Properties.Resources._queen_of_clubs;
             this.flop1.Location = new System.Drawing.Point(73, 3);
             this.flop1.Name = "flop1";
             this.flop1.Size = new System.Drawing.Size(74, 93);
