@@ -83,6 +83,12 @@ namespace CardGame.View
 
         }
 
+        internal void highlightPlayer(int player)
+        {
+            playerList[player].BackColor = Color.LimeGreen; 
+
+        }
+
         internal void displayDealer(int playerIndex)
         {
             foreach (var player in playerList)

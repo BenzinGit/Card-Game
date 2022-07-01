@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CardGame.Texas_Hold_em.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,13 +10,8 @@ namespace CardGame
     internal class Deck
     {
         private List<Card> deck;
-        private enum Suit
-        {
-            Hearts, Diamonds, Clubs, Spades
 
-        }
-
-
+    
 
         public Deck()
         {
@@ -27,14 +23,18 @@ namespace CardGame
 
         private void setUpDeck()
         {
-            foreach (string suit in Enum.GetNames(typeof(Suit)))
-            { 
+            List<Suit> suitList = new List<Suit>();
+            suitList.Add(new Suit(Suit.CardSuit.Clubs));
+            suitList.Add(new Suit(Suit.CardSuit.Spades));
+            suitList.Add(new Suit(Suit.CardSuit.Hearts));
+            suitList.Add(new Suit(Suit.CardSuit.Diamonds));
+
+            foreach (var suits in suitList)
+            {
                 for (int i = 2; i < 15; i++)
                 {
-                    deck.Add(new Card(i, suit));
-                    
+                    deck.Add(new Card(i, suits));
                 }
-
              }
         }
 
@@ -45,11 +45,20 @@ namespace CardGame
             deck.Remove(card);
 
             return card;
-
-
-
-
         }
+
+        public List<Card> drawCards(int x)
+        {
+            List<Card> cards = new List<Card>();
+
+            for (int i = 0; i < x; i++)
+            {
+              cards.Add(drawCard());
+            }
+
+            return cards;
+        }
+
 
         public int cardsLeft()
         {

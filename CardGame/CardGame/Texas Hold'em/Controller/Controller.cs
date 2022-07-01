@@ -13,15 +13,15 @@ namespace CardGame.Texas_Hold_em.Controller
     {
         private int startingCash = 5000;
         private int bigBlind = 50; 
-        private int smallBlind = 25; 
-
+        private int smallBlind = 25;
+        private int cashToCall = 0; 
 
         private Deck deck; 
         private List<Player> players;
         private SharedCards sharedCards;
         private Pot pot; 
         private TexasHoldem view;
-        
+
         public Controller(TexasHoldem view)
         {
             this.view = view;
@@ -30,7 +30,6 @@ namespace CardGame.Texas_Hold_em.Controller
             deck = new Deck();
             sharedCards =  new SharedCards();
             pot = new Pot(); 
-
         }
 
         public void setUpGame()
@@ -43,20 +42,47 @@ namespace CardGame.Texas_Hold_em.Controller
 
             Random rand = new Random();
 
-            assignDealer(rand.Next(0, 4));
+            assignDealer(rand.Next(0, players.Count));
 
             foreach (var player in players)
             {
                 player.Cash = startingCash; 
             }
 
-            view.setUpGame(players, startingCash);  
+            view.setUpGame(players, startingCash);
 
-            startFirstRound();
+            
+            
+            int startingPlayer = setUpFirstRound();
+            startRound(startingPlayer);
 
         }
 
-        private void startFirstRound()
+        private void startRound(int startingPlayer)
+        {
+            view.highlightPlayer(startingPlayer);
+
+            /// Remove
+           
+            List<Card> cards = new List<Card>();
+            Card card1 = deck.drawCard();
+            Card card2 = deck.drawCard();
+            cards = deck.drawCards(3); 
+
+            sharedCards.setFlop(cards);
+            sharedCards.setTurn(card1); 
+            sharedCards.setRiver(card2);
+
+            view.displayFlop(cards[0].Image, cards[1].Image, cards[2].Image);
+            view.displayTurn(card1.Image);
+            view.displayRiver(card2.Image);
+            /// Remove
+
+
+            int call = players[startingPlayer].makeDecision(cashToCall, pot.pot, players.Count, sharedCards.getCards());
+        }
+
+        private int setUpFirstRound()
         {
             assignNextDealer(); 
             deck.shuffleDeck();
@@ -65,13 +91,11 @@ namespace CardGame.Texas_Hold_em.Controller
             updatePot(); 
             view.updateBoard();
             showPlayerCards(0);
-            startBettingRound(bigBlindIndex);
-
-            Card card1 = deck.drawCard();
-            Card card2 = deck.drawCard();
-            Card card3 = deck.drawCard();
-
-            view.displayFlop(card1.Image, card2.Image, card3.Image); 
+           
+            // only debugging
+            showAllPlayerCards(); 
+           
+            return getNextPlayer(bigBlindIndex);  
         }
 
 
@@ -89,18 +113,14 @@ namespace CardGame.Texas_Hold_em.Controller
                 return nextPlayerIndex;
             }
         }
-        private void startBettingRound(int bigBlindIndex)
+        
+
+        private void startBetting(int startingPlayerIndex)
         {
-            int startingPlayer = bigBlindIndex + 1;
-            if (startingPlayer >= players.Count)
-            {
-                startingPlayer = 0;
-
-            }
-
-
+            Console.WriteLine(startingPlayerIndex + " ska börja");
 
         }
+
         private void updatePot()
         {
             int totalPot = 0;
@@ -138,7 +158,7 @@ namespace CardGame.Texas_Hold_em.Controller
 
             players[smallBlindIndex].makeBet(smallBlind);
             players[bigBlindIndex].makeBet(bigBlind);
-
+            cashToCall = bigBlind; 
             return bigBlindIndex; 
 
         }
@@ -199,15 +219,12 @@ namespace CardGame.Texas_Hold_em.Controller
         {
             foreach (var player in players)
             {
-                player.Card1 = deck.drawCard();
+                player.HoleCards.setCards(deck.drawCard(), deck.drawCard());     
+                    
 
             }
 
-            foreach (var player in players)
-            {
-                player.Card2 = deck.drawCard();
-            }
-
+           
 
         }
 
@@ -228,7 +245,7 @@ namespace CardGame.Texas_Hold_em.Controller
         private void showPlayerCards(int playerIndex)
         {
 
-            view.displayPlayerCards(playerIndex, players[playerIndex].Card1.Image, players[playerIndex].Card2.Image);
+            view.displayPlayerCards(playerIndex, players[playerIndex].HoleCards.Card1.Image, players[playerIndex].HoleCards.Card2.Image);
 
         }
 
@@ -237,7 +254,7 @@ namespace CardGame.Texas_Hold_em.Controller
 
             for(int i = 0; i < players.Count; i++)
             {
-                view.displayPlayerCards(i, players[i].Card1.Image, players[i].Card2.Image);
+                view.displayPlayerCards(i, players[i].HoleCards.Card1.Image, players[i].HoleCards.Card2.Image);
 
 
             }

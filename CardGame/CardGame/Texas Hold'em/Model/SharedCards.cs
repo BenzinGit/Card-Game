@@ -15,14 +15,11 @@ namespace CardGame.Texas_Hold_em.Model
 
         public SharedCards()
         {
-
+            flop = new List<Card>();
 
 
         }
 
-        internal List<Card> Flop { get => flop; set => flop = value; }
-        internal Card Turn { get => turn; set => turn = value; }
-        internal Card River { get => river; set => river = value; }
 
         public void removeCards()
         {
@@ -30,6 +27,61 @@ namespace CardGame.Texas_Hold_em.Model
             turn = null; 
             river = null;
 
+        }
+
+        public Dictionary<string, Card> getAllCards()
+        {
+            Dictionary<string, Card> cards = new Dictionary<string, Card>();
+            
+            if(flop != null)
+            {
+                cards.Add("Flop1", flop[0]);
+                cards.Add("Flop2", flop[1]);
+                cards.Add("Flop3", flop[2]);
+            }
+            if(turn != null)
+            cards.Add("Turn", turn);
+            if(river != null)
+            cards.Add("River", river);
+
+            return cards;   
+           
+
+        }
+
+        public void setFlop(List<Card> cards)
+        {
+            flop.AddRange(cards); 
+        }
+
+        public void setTurn(Card card)
+        {
+            this.turn = card; 
+        }
+
+        public void setRiver(Card card)
+        {
+            this.river = card; 
+        }
+
+        public List<Card> getCards()
+        {
+
+            List<Card> cards = new List<Card>();
+
+            if (flop != null)
+            {
+                cards.Add(flop[0]);
+                cards.Add(flop[1]);
+                cards.Add(flop[2]);
+            }
+            if (turn != null)
+                cards.Add(turn);
+            if (river != null)
+                cards.Add(river);
+
+
+            return cards; 
         }
     }
 }

@@ -56,6 +56,10 @@
     </Compile>
     <Compile Include="Texas Hold%27em\Controller\Controller.cs" />
     <Compile Include="Texas Hold%27em\Model\AI.cs" />
+    <Compile Include="Texas Hold%27em\Model\CardEvaluator.cs" />
+    <Compile Include="Texas Hold%27em\Model\Hand.cs" />
+    <Compile Include="Texas Hold%27em\Model\Suit.cs" />
+    <Compile Include="Texas Hold%27em\Model\HoleCards.cs" />
     <Compile Include="Texas Hold%27em\Model\Player.cs" />
     <Compile Include="Texas Hold%27em\Model\Pot.cs" />
     <Compile Include="Texas Hold%27em\Model\SharedCards.cs" />
@@ -324,5 +328,6 @@
   <ItemGroup>
     <None Include="Resources\man.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
