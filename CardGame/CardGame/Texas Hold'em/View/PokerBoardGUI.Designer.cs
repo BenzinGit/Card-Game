@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.log = new System.Windows.Forms.RichTextBox();
-            this.playerControlGUI1 = new CardGame.Texas_Hold_em.View.PlayerControlGUI();
             this.community = new CardGame.Texas_Hold_em.View.community();
             this.playerGUI4 = new CardGame.Texas_Hold_em.View.PlayerGUI();
             this.playerGUI3 = new CardGame.Texas_Hold_em.View.PlayerGUI();
             this.playerGUI2 = new CardGame.Texas_Hold_em.View.PlayerGUI();
             this.playerGUI1 = new CardGame.Texas_Hold_em.View.PlayerGUI();
+            this.playerControlGUI = new CardGame.Texas_Hold_em.View.PlayerControlGUI();
             this.SuspendLayout();
             // 
             // log
@@ -45,15 +45,6 @@
             this.log.Size = new System.Drawing.Size(187, 67);
             this.log.TabIndex = 6;
             this.log.Text = "";
-            // 
-            // playerControlGUI1
-            // 
-            this.playerControlGUI1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.playerControlGUI1.BackColor = System.Drawing.SystemColors.Control;
-            this.playerControlGUI1.Location = new System.Drawing.Point(0, 564);
-            this.playerControlGUI1.Name = "playerControlGUI1";
-            this.playerControlGUI1.Size = new System.Drawing.Size(1099, 67);
-            this.playerControlGUI1.TabIndex = 5;
             // 
             // community
             // 
@@ -99,13 +90,22 @@
             this.playerGUI1.Size = new System.Drawing.Size(173, 138);
             this.playerGUI1.TabIndex = 0;
             // 
+            // playerControlGUI
+            // 
+            this.playerControlGUI.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.playerControlGUI.BackColor = System.Drawing.SystemColors.Control;
+            this.playerControlGUI.Location = new System.Drawing.Point(0, 564);
+            this.playerControlGUI.Name = "playerControlGUI";
+            this.playerControlGUI.Size = new System.Drawing.Size(912, 67);
+            this.playerControlGUI.TabIndex = 7;
+            // 
             // TexasHoldem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DarkGreen;
+            this.Controls.Add(this.playerControlGUI);
             this.Controls.Add(this.log);
-            this.Controls.Add(this.playerControlGUI1);
             this.Controls.Add(this.community);
             this.Controls.Add(this.playerGUI4);
             this.Controls.Add(this.playerGUI3);
@@ -129,7 +129,7 @@
         private Texas_Hold_em.View.PlayerGUI playerGUI3;
         private Texas_Hold_em.View.PlayerGUI playerGUI4;
         private Texas_Hold_em.View.community community;
-        private Texas_Hold_em.View.PlayerControlGUI playerControlGUI1;
         private System.Windows.Forms.RichTextBox log;
+        private Texas_Hold_em.View.PlayerControlGUI playerControlGUI;
     }
 }

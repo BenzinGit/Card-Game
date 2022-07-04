@@ -78,111 +78,261 @@ namespace CardGame.Texas_Hold_em.Model
             return 0; 
         }
 
-        internal static string eveluateHand(HoleCards hand, List<Card> cardsOnTable)
+        internal static Hand eveluateHand(HoleCards holeCards, List<Card> cardsOnTable)
         {
             List<Card> cards = new List<Card>();
-              cards.Add(hand.Card1);
-              cards.Add(hand.Card2);
+              cards.Add(holeCards.Card1);
+              cards.Add(holeCards.Card2);
                cards.AddRange(cardsOnTable);
 
 
 
   
 
-            cards = cards.OrderBy(card => card.Value).ToList();
+            cards = cards.OrderBy(card => card.Value).Reverse().ToList();
 
-           
+            Hand hand = null;
 
-
-            if (isStraightFlush(cards))
-                return "isStraightFlush";
-            if (isFourOfAKind(cards))
-                return "isFourOfAKind";
-            if (isFullHouse(cards))
-                return "isFullHouse";
-            if (isFlush(cards))
-                return "isFlush";
-            if (isStraight(cards))
-                return "isStraight";
-            if (isThreeOfAKind(cards))
-                return "isThreeOfAKind";
-            if (isTwoPair(cards) != null)
-                return "isTwoPair";
-            if (isPair(cards) != null)
-                return "isPair"; 
-
-            return "nothin"; 
-        }
-
-        private static Boolean isStraightFlush(List<Card> cards)
-        {
-            if (isFlush(cards) && (isStraight(cards)))
-             {
-                return true; 
+            hand = isStraightFlush(cards);
+            if(hand != null)
+            {
+                return hand; 
             }
-            return false;
+            hand = isFourOfAKind(cards);
+            if (hand != null)
+            {
+                return hand;
+            }
+            hand = isFullHouse(cards);
+            if (hand != null)
+            {
+                return hand;
+            }
+            hand = isFlush(cards);
+            if (hand != null)
+            {
+                return hand;
+            }
+            hand = isStraight(cards);
+            if (hand != null)
+            {
+                return hand;
+            }
+            hand = isThreeOfAKind(cards);
+            if (hand != null)
+            {
+                return hand;
+            }
+            hand = isTwoPair(cards);
+            if (hand != null)
+            {
+                return hand;
+            }
+            hand = isPair(cards);
+            if (hand != null)
+            {
+                return hand;
+            }
+            return isHighCard(cards); 
+
+        }
+
+        private static Hand isHighCard(List<Card> cardsIn)
+        {
+            List<Card> cards = cardsIn.ToList();
+            List<Card> kickers = new List<Card>();
+            kickers.Add(cards[1]);
+            kickers.Add(cards[2]);
+            kickers.Add(cards[3]);
+            kickers.Add(cards[4]);
+
+            return new Hand(1, cards[0], kickers); 
         }
 
 
-        private static Boolean isFlush(List<Card> cards)
+        private static Hand isStraightFlush(List<Card> cardsIn)
         {
+            List<Card> cards = cardsIn.ToList();
+
+            Hand isFlushCards = isFlush(cards); 
+
+            if (isFlushCards != null)
+            {
+                for (int i = 0; i < cards.Count; i++)
+                {
+                    if (!cards[i].Suit.cardSuit.ToString().Equals(isFlushCards.MainCard.Suit.cardSuit.ToString()))
+                    {
+                      
+
+                        cards.RemoveAt(i); 
+                    }
+
+                }
+
+                if (isStraight(cards) != null)
+                {
+                    // Royal straight flush
+                    if (isFlushCards.MainCard.Value == 14)
+                    {
+                        return new Hand(10, isFlushCards.MainCard, null);
+                    }
+                    else
+                    {
+                        return new Hand(9, isFlushCards.MainCard, null);
+
+                    }
+                }
+                return null; 
+            }
+            return null;
+
+
+        }
+
+
+
+
+
+
+
+
+        private static Hand isFourOfAKind(List<Card> cardsIn)
+        {
+            List<Card> cards = cardsIn.ToList();
+
+            for (int i = 0; i < cards.Count - 3; i++)
+            {
+                if (cards[i].Value == cards[i + 1].Value && 
+                    cards[i].Value == cards[i + 2].Value && 
+                    cards[i].Value == cards[i + 3].Value)
+                {
+                    Card mainCard = cards[i];
+                    cards.RemoveRange(i, 4);  
+                    List<Card> kickers = new List<Card>();
+                    kickers.Add(cards[0]); 
+                    return new Hand(8, mainCard, kickers);
+
+                }
+            }
+            return null;
+        }
+
+        private static Hand isFullHouse(List<Card> cardsIn)
+        {
+            List<Card> cards = cardsIn.ToList();
+
+            Hand threeofAKindHands = isThreeOfAKind(cards);
+           
+            if(threeofAKindHands != null)
+            {
+                for (int i = 0; i < cards.Count; i++)   
+                {
+                    if (cards[i].Value == threeofAKindHands.MainCard.Value)
+                    {
+                        cards.RemoveAt(i); 
+                    }
+                }
+
+                Hand pairHands = isPair(cards);
+
+                if(pairHands != null)
+                {
+                    if (pairHands.HandValue != threeofAKindHands.HandValue)
+                    {
+                        List<Card> kickers = new List<Card>();
+                        kickers.Add(pairHands.MainCard);
+                        return new Hand(7, threeofAKindHands.MainCard, kickers);
+
+                    }
+
+                }
+            }
+            else
+            {
+                return null; 
+            }
+            
+            return null;
+        }
+
+
+        private static Hand isFlush(List<Card> cardsIn)
+        {
+            List<Card> cards = cardsIn.ToList();
+
             int hearts = 0;
             int clubs = 0;
             int diamonds = 0;
             int spades = 0;
 
-
+            Suit suit = null;
             foreach (var card in cards)
             {
-                if(card.Suit.cardSuit == Suit.CardSuit.Spades)
+                if (card.Suit.cardSuit == Suit.CardSuit.Spades)
                 {
-                    spades++; 
+                    spades++;
+                    if(spades == 5)
+                    {
+                        suit = new Suit(Suit.CardSuit.Spades); 
+                    }
                 }
                 if (card.Suit.cardSuit == Suit.CardSuit.Clubs)
                 {
                     clubs++;
+                    if (clubs == 5)
+                    {
+                        suit = new Suit(Suit.CardSuit.Clubs);
+                    }
                 }
                 if (card.Suit.cardSuit == Suit.CardSuit.Diamonds)
                 {
                     diamonds++;
+                    if (diamonds == 5)
+                    {
+                        suit = new Suit(Suit.CardSuit.Diamonds);
+                    }
                 }
                 if (card.Suit.cardSuit == Suit.CardSuit.Hearts)
                 {
                     hearts++;
+                    if (hearts == 5)
+                    {
+                        suit = new Suit(Suit.CardSuit.Hearts);
+                    }
                 }
             }
 
 
-            if(spades >= 5 || clubs >= 5 || diamonds >= 5 || hearts >= 5)
+            if (spades >= 5 || clubs >= 5 || diamonds >= 5 || hearts >= 5)
             {
-                return true; 
-            }
-            return false; 
-
-            
-
-
-        }
-
-     
-
-        private static Boolean isThreeOfAKind(List<Card> cards)
-        {
-            for (int i = 0; i < cards.Count - 2; i++)
-            {
-                if (cards[i].Value == cards[i + 1].Value && cards[i].Value == cards[i+2].Value)
+                for (int i = 0; i < cards.Count; i++)
                 {
-                    return true;
-
+                    if (cards[i].Suit.cardSuit != suit.cardSuit)
+                    {
+                        cards.RemoveAt(i);
+                    }
                 }
+
+                List<Card> kickers = new List<Card>();
+                kickers.Add(cards[1]);
+                kickers.Add(cards[2]);
+                kickers.Add(cards[3]);
+                kickers.Add(cards[4]);
+
+
+                return new Hand(6, cards[0], kickers);
             }
-            return false; 
+            return null;
+
+
+
+
         }
 
-        private static Boolean isStraight(List<Card> cards)
+
+        private static Hand isStraight(List<Card> cardsIn)
         {
-            if (cards.Count <= 5)
-            {
+            List<Card> cards = cardsIn.ToList();
 
                 // Removes dublicates of cards by value 
                 // https://stackoverflow.com/questions/9993172/remove-objects-with-a-duplicate-property-from-list
@@ -192,83 +342,103 @@ namespace CardGame.Texas_Hold_em.Model
                 for (int i = 0; i < cards.Count - 4; i++)
                 {
 
-                    if ((cards[i +0].Value == (cards[i + 1].Value - 1)) &&
-                       (cards[i + 1].Value == (cards[i + 2].Value - 1)) &&
-                       (cards[i + 2].Value == (cards[i + 3].Value - 1)) &&
-                       (cards[i + 3].Value == (cards[i + 4].Value - 1)))
+                    if ((cards[i + 0].Value == (cards[i + 1].Value + 1)) &&
+                       (cards[i + 1].Value == (cards[i + 2].Value + 1)) &&
+                       (cards[i + 2].Value == (cards[i + 3].Value + 1)) &&
+                       (cards[i + 3].Value == (cards[i + 4].Value + 1)))
                     {
-                        return true;
+
+                        return new Hand(5, cards[i], null);
 
                     }
                 }
-            }
-                return false;
+                return null; 
+                
 
-            
         }
 
-        private static Boolean isFullHouse(List<Card> cards)
+        // Done
+        private static Hand isThreeOfAKind(List<Card> cardsIn)
         {
-         //   if(isPair(cards) && isThreeOfAKind(cards))
-          //  {
-                // Fixa så inte triss blir fullt hus
-                // if pair.value != threeofakind.value
-           //     return true; 
-          //  }
-            return false; 
-        }
 
-     
+            List<Card> cards = cardsIn.ToList();
 
-        private static Boolean isFourOfAKind(List<Card> cards)
-        {
-            for (int i = 0; i < cards.Count - 3; i++)
+            for (int i = 0; i < cards.Count - 2; i++)
             {
-                if (cards[i].Value == cards[i + 1].Value && 
-                    cards[i].Value == cards[i + 2].Value && 
-                    cards[i].Value == cards[i + 3].Value)
+                if (cards[i].Value == cards[i + 1].Value && cards[i].Value == cards[i + 2].Value)
                 {
-                    return true;
+                    Card mainCard = cards[i];
+                    List<Card> kickers = new List<Card>();
 
+                    cards.RemoveRange(i, 3);
+                    kickers.Add(cards[0]);
+                    kickers.Add(cards[1]);
+
+                    return new Hand(4, mainCard, kickers); 
                 }
             }
-            return false;
+            return null;
         }
 
+        // Done
         private static Hand isTwoPair(List<Card> cardsIn)
         {
-
-            int pairCounter = 0;
-            List<Card> handCards = new List<Card>();
             List<Card> cards = cardsIn.ToList();
+
+   
+          
+            int pairCounter = 0; 
+            List<Card> kickers = new List<Card>();
+
+            Card mainCard = null;
+
 
             for (int i = 0; i < cards.Count - 1; i++)
             {
+               
+
                 if (cards[i].Value == cards[i + 1].Value)
                 {
-                    handCards.Add(cards[i]);
-                    handCards.Add(cards[i + 1]);
-                    cards.RemoveRange(i, 2); 
                     pairCounter++;
+                    if (pairCounter == 1)
+                    {
+                        mainCard = cards[i];
+
+                        cards.RemoveRange(i, 2);
+                        i = -1;
+
+                    }
+                    else if (pairCounter == 2)  
+                    {
+                        kickers.Add(cards[i]);
+                        cards.RemoveRange(i, 2);
+
+
+                    }
+
 
                 }
             }
-
+            Console.WriteLine(pairCounter);
             if (pairCounter == 2)
             {
-                handCards.Add(cards[cards.Count - 1]);
 
-                foreach (var card in handCards)
-                {
-                    card.printCard(); 
-                }
+                kickers.Add(cards[0]);
 
-                return new Hand(8, handCards); 
+                Console.WriteLine(mainCard.print());
+                Console.WriteLine(kickers[0].print());
+                Console.WriteLine(kickers[1].print());
+
+
+                return new Hand(3, mainCard, kickers); 
             }
+
             return null;
 
         }
 
+
+        // Done
         private static Hand isPair(List<Card> cardsIn)
         {
             // To not modify the origninal list
@@ -279,30 +449,32 @@ namespace CardGame.Texas_Hold_em.Model
                 if (cards[i].Value == cards[i + 1].Value)
                 {
 
-                    List<Card> handCards = new List<Card>();
+                    List<Card> kickers = new List<Card>();
 
-                    handCards.Add(cards[i]);
-                    handCards.Add(cards[i + 1]);
-
+                    Card mainCard = cards[i]; 
+                    
                     // Removing the pair
                     cards.RemoveRange(i, 2); 
 
 
                     // Kickers
-                    handCards.Add(cards[cards.Count - 1]);
-                    handCards.Add(cards[cards.Count - 2]);
-                    handCards.Add(cards[cards.Count - 3]);
+                    kickers.Add(cards[0]);
+                    kickers.Add(cards[1]);
+                    kickers.Add(cards[2]);
 
                     
 
-                    return new Hand(9, handCards);
+                    return new Hand(2, mainCard, kickers);
 
                 }
             }
             return null; 
         }
+
+
+
     }
-
-
-
 }
+
+
+

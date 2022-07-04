@@ -12,14 +12,18 @@ namespace CardGame.Texas_Hold_em.Model
 
         private int handValue;
         private string handName;
-        // 5 cards 
-        private List<Card> cards; 
-
         
 
-        public Hand(int handValue, List<Card> cards)
+        private Card mainCard; 
+        private List<Card> kickers;
+
+
+
+        public Hand(int handValue, Card mainCard, List<Card> kickers)
         {
             this.handValue = handValue;
+            this.kickers = kickers;
+            this.mainCard = mainCard;   
 
             switch (handValue)
             {
@@ -61,10 +65,15 @@ namespace CardGame.Texas_Hold_em.Model
                     handName = "High Card";
                     break;
 
-
                 default:
                     break;
             }
-        }   
+
+        }
+
+        public int HandValue { get => handValue; set => handValue = value; }
+        public string HandName { get => handName; set => handName = value; }
+        internal Card MainCard { get => mainCard; set => mainCard = value; }
+        internal List<Card> Kickers { get => kickers; set => kickers = value; }
     }
 }

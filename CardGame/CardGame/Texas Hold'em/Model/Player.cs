@@ -11,8 +11,7 @@ namespace CardGame.Texas_Hold_em.Model
         private string name;
         private int cash;
         private HoleCards holeCards;
-        private Card card1; 
-        private Card card2;
+      
 
 
         private int bet; 
@@ -32,8 +31,7 @@ namespace CardGame.Texas_Hold_em.Model
         public int Bet { get => bet; set => bet = value; }
     
         internal HoleCards HoleCards { get => holeCards; set => holeCards = value; }
-        internal Card Card1 { get => card1; set => card1 = value; }
-        internal Card Card2 { get => card2; set => card2 = value; }
+      
 
         public void makeBet(int newBet)
         {
@@ -45,9 +43,7 @@ namespace CardGame.Texas_Hold_em.Model
 
         internal int makeDecision(int cashToCall, int pot, int playersLeft, List<Card> cardsOnTable)
         {
-            Console.WriteLine(name + " will now make a decision...");
 
-            Console.WriteLine(cashToCall + " cash to call");
             ai.evaluateStartingHand(holeCards);
 
             if(cardsOnTable.Count == 0)
@@ -57,8 +53,6 @@ namespace CardGame.Texas_Hold_em.Model
             }
             else
             {
-
-                Console.WriteLine(CardEvaluator.eveluateHand(this.holeCards, cardsOnTable));
 
 
             }

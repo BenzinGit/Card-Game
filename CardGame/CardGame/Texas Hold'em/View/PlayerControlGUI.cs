@@ -17,4 +17,7 @@ namespace CardGame.Texas_Hold_em.View
             InitializeComponent();
         }
     }
+
+
+  
 }

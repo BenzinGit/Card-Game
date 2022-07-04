@@ -117,5 +117,10 @@ namespace CardGame.View
 
 
         }
+
+        public void displayCardHandCombo(string text)
+        {
+            playerControlGUI.hand.Text = text; 
+        }
     }
 }

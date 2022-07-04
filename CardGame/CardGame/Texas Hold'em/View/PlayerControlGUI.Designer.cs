@@ -81,13 +81,14 @@
             // 
             // hand
             // 
+            this.hand.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.hand.AutoSize = true;
-            this.hand.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.hand.Location = new System.Drawing.Point(31, 23);
+            this.hand.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hand.Location = new System.Drawing.Point(3, 26);
             this.hand.Name = "hand";
-            this.hand.Size = new System.Drawing.Size(139, 24);
+            this.hand.Size = new System.Drawing.Size(71, 20);
             this.hand.TabIndex = 8;
-            this.hand.Text = "Three-of-a-kind";
+            this.hand.Text = "One-Pair";
             // 
             // PlayerControlGUI
             // 
@@ -101,7 +102,7 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Name = "PlayerControlGUI";
-            this.Size = new System.Drawing.Size(510, 67);
+            this.Size = new System.Drawing.Size(524, 67);
             ((System.ComponentModel.ISupportInitialize)(this.slider)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
@@ -116,6 +117,6 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.TrackBar slider;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.Label hand;
+        public System.Windows.Forms.Label hand;
     }
 }

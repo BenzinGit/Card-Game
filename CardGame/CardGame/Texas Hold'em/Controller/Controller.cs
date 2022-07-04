@@ -54,6 +54,7 @@ namespace CardGame.Texas_Hold_em.Controller
             
             
             int startingPlayer = setUpFirstRound();
+           
             startRound(startingPlayer);
 
         }
@@ -62,25 +63,81 @@ namespace CardGame.Texas_Hold_em.Controller
         {
             view.highlightPlayer(startingPlayer);
 
-            /// Remove
-           
-            List<Card> cards = new List<Card>();
-            Card card1 = deck.drawCard();
-            Card card2 = deck.drawCard();
-            cards = deck.drawCards(3); 
+            // Delete
+           DrawFlop();
+           DrawTurn();
+            DrawRiver();
+            // Delete
 
-            sharedCards.setFlop(cards);
-            sharedCards.setTurn(card1); 
-            sharedCards.setRiver(card2);
+            Card card1 = new Card(13, "diamonds");
+            Card card2 = new Card(11, "diamonds");
+            Card card3 = new Card(9, "spades");
+            Card card4 = new Card(8, "diamonds");
+            Card card5 = new Card(13, "hearts");
 
-            view.displayFlop(cards[0].Image, cards[1].Image, cards[2].Image);
-            view.displayTurn(card1.Image);
-            view.displayRiver(card2.Image);
-            /// Remove
+            Card card7 = new Card(11, "hearts");
+            Card card8 = new Card(3, "spades");
 
-
+         //   DrawCustomCommunityCards(card1, card2, card3, card4, card5);
+         //   DealCustomCards(startingPlayer, card7, card8); 
             int call = players[startingPlayer].makeDecision(cashToCall, pot.pot, players.Count, sharedCards.getCards());
+
+            Hand hand = CardEvaluator.eveluateHand(players[startingPlayer].HoleCards, sharedCards.getCards());
+            view.displayCardHandCombo(hand.HandName); 
+
         }
+
+        private void DrawFlop()
+        {
+            List<Card> cards = deck.drawCards(3);
+            sharedCards.setFlop(cards);
+            view.displayFlop(cards[0].Image, cards[1].Image, cards[2].Image);
+        }
+
+      
+
+        private void DrawTurn()
+        {
+            Card turnCard = deck.drawCard();
+            sharedCards.setTurn(turnCard);
+            view.displayTurn(turnCard.Image);
+
+        }
+
+        private void DrawRiver()
+        {
+            Card riverCard = deck.drawCard();
+            sharedCards.setRiver(riverCard);
+            view.displayRiver(riverCard.Image);
+        }
+
+
+        private void DrawCustomCommunityCards(Card flop1, Card flop2, Card flop3, Card turn, Card river)
+        {
+            List<Card> flopCards = new List<Card>();
+            flopCards.Add(flop1);
+            flopCards.Add(flop2);
+            flopCards.Add(flop3);
+
+            sharedCards.setFlop(flopCards);
+            view.displayFlop(flopCards[0].Image, flopCards[1].Image, flopCards[2].Image);
+
+            sharedCards.setTurn(turn);
+            view.displayTurn(turn.Image);
+
+            sharedCards.setRiver(river);
+            view.displayRiver(river.Image);
+
+        }
+
+        private void DealCustomCards(int playerIndex, Card card1, Card card2)
+        {
+            players[playerIndex].HoleCards.setCards(card1, card2);
+            showPlayerCards(playerIndex);
+
+
+        }
+
 
         private int setUpFirstRound()
         {
@@ -223,10 +280,9 @@ namespace CardGame.Texas_Hold_em.Controller
                     
 
             }
-
-           
-
         }
+
+ 
 
         private void assignDealer(int playerIndex)
         {
