@@ -14,10 +14,11 @@ namespace CardGame.Texas_Hold_em.Controller
         private int startingCash = 5000;
         private int bigBlind = 50; 
         private int smallBlind = 25;
-        private int cashToCall = 0; 
-
+        private int cashToCall = 0;
+        private int waitTime = 50; 
         private Deck deck; 
         private List<Player> players;
+
         private SharedCards sharedCards;
         private Pot pot; 
         private TexasHoldem view;
@@ -32,16 +33,88 @@ namespace CardGame.Texas_Hold_em.Controller
             pot = new Pot(); 
         }
 
-        public void setUpGame()
+        public void PlayGame()
+        {
+            setUpGame();
+
+            int startingPlayer = SetUpFirstRound();
+
+            // 1st round
+            PlayRound(startingPlayer);
+            Wait(waitTime);
+
+            PrepareNextRound();
+            DrawFlop();
+            PlayRound(startingPlayer);
+            Wait(waitTime);
+
+            PrepareNextRound();
+            DrawTurn();
+            PlayRound(startingPlayer);
+            Wait(waitTime);
+
+            PrepareNextRound();
+            DrawRiver();
+            PlayRound(startingPlayer);
+
+            DecideWinner(); 
+
+
+        }
+
+        private Player DecideWinner()
+        {
+            List<Player> playersLeft = new List<Player>();
+            foreach (var player in players)
+            {
+                if (!player.HasFolded)
+                {
+                    playersLeft.Add(player);
+                }
+            }
+
+            CardEvaluator.DecideWinner(playersLeft, sharedCards.getCards());
+            view.DisplayEndHands(playersLeft); 
+            return players[0]; 
+        }
+
+        private void PrepareNextRound()
+        {
+            foreach (var player in players)
+            {
+                player.Bet = 0;
+                view.RemoveBets();
+               
+                if (!player.HasFolded)
+                {
+                    player.IsPassive = false;
+                    view.setCallSign("", players.IndexOf(player));
+
+
+                }
+                if (player.Cash == 0)
+                {
+                    player.IsPassive = true;
+
+                }
+
+            }
+            cashToCall = 0;
+          
+           
+        }
+
+        private void setUpGame()
         {
             players.Add(new Player("You"));
             players.Add(new Player("Johnny"));
             players.Add(new Player("Barry"));
             players.Add(new Player("Jericho"));
+            players[0].Ai = null;
 
 
+            // Assigning random dealer for game
             Random rand = new Random();
-
             assignDealer(rand.Next(0, players.Count));
 
             foreach (var player in players)
@@ -49,49 +122,187 @@ namespace CardGame.Texas_Hold_em.Controller
                 player.Cash = startingCash; 
             }
 
+            // Setting up view
             view.setUpGame(players, startingCash);
 
-            
-            
-            int startingPlayer = setUpFirstRound();
-           
-            startRound(startingPlayer);
 
         }
 
-        private void startRound(int startingPlayer)
+        private void PlayRound(int startingPlayer)
         {
-            view.highlightPlayer(startingPlayer);
+            
+            Player currentPlayer = players[startingPlayer];
+            Boolean allPassivePlayers = false;
 
-            // Delete
-           DrawFlop();
-           DrawTurn();
-            DrawRiver();
-            // Delete
+            while (!allPassivePlayers)
+            {
+                if (currentPlayer.HasFolded)
+                {
+                    currentPlayer = players[GetNextPlayer(players.IndexOf(currentPlayer))]; 
+                }
 
-            Card card1 = new Card(13, "diamonds");
-            Card card2 = new Card(11, "diamonds");
-            Card card3 = new Card(9, "spades");
-            Card card4 = new Card(8, "diamonds");
-            Card card5 = new Card(13, "hearts");
+                view.HighlightPlayer(players.IndexOf(currentPlayer));
 
-            Card card7 = new Card(11, "hearts");
-            Card card8 = new Card(3, "spades");
+                int choice; 
+                
+                // Bot players
+                if (currentPlayer.Ai != null)
+                {
+                    Wait(waitTime);
+                    choice = currentPlayer.MakeDecision(cashToCall, pot.pot, players.Count, sharedCards.getCards());
 
-         //   DrawCustomCommunityCards(card1, card2, card3, card4, card5);
-         //   DealCustomCards(startingPlayer, card7, card8); 
-            int call = players[startingPlayer].makeDecision(cashToCall, pot.pot, players.Count, sharedCards.getCards());
 
-            Hand hand = CardEvaluator.eveluateHand(players[startingPlayer].HoleCards, sharedCards.getCards());
-            view.displayCardHandCombo(hand.HandName); 
+                }
+
+                // Human player
+                else
+                {
+                    view.playerControlGUI.EnableButtons();
+
+                    if(cashToCall > currentPlayer.Bet)
+                    {
+                        view.SetMaximumBet(currentPlayer.Cash);
+
+                        view.ChangeButtons(true, cashToCall - currentPlayer.Bet);
+                    }
+                    else
+                    {
+                        view.SetMaximumBet(currentPlayer.Cash);
+
+                        view.ChangeButtons(false, 0);
+
+                    }
+
+                    choice = 0; 
+                    while(choice == 0)
+                    {
+                        // waiting for player
+                        choice = view.GetPlayerInput();
+                        Wait(100); 
+                    }
+
+                    view.ResetControl();
+                    view.playerControlGUI.DisableButtons(); 
+                }
+
+
+                // Check / call
+                if (choice == 1)
+                {
+                    if(cashToCall == currentPlayer.Bet)
+                    {
+                        view.setCallSign("Check", players.IndexOf(currentPlayer));
+
+                    }
+                    else
+                    {
+                        view.setCallSign("Call", players.IndexOf(currentPlayer));
+
+                    }
+
+                    int b = currentPlayer.Bet; 
+                    currentPlayer.Call(cashToCall);
+                    cashToCall = currentPlayer.Bet;
+                    pot.pot = pot.pot + currentPlayer.Bet - b;
+
+                }
+                
+              
+                // Fold
+                else if (choice == -1)
+                {
+                    currentPlayer.Fold();
+                    view.setCallSign("Fold", players.IndexOf(currentPlayer));
+
+                }
+               
+                // Bet / Raise
+                else
+                {
+                    int b = currentPlayer.Bet;
+
+                    currentPlayer.Raise(choice);
+                    cashToCall = currentPlayer.Bet;
+                    pot.pot = pot.pot + currentPlayer.Bet - b; 
+
+                    view.setCallSign("Raise", players.IndexOf(currentPlayer));
+
+                    foreach (var player in players)
+                    {
+                        if (!player.HasFolded)
+                        {
+                            player.IsPassive = false;
+
+                        }
+                    }
+                    currentPlayer.IsPassive = true; 
+
+                }
+
+                if(currentPlayer.Cash == 0)
+                {
+                    currentPlayer.IsPassive = true; 
+                }
+
+
+
+                view.updateBoard();
+
+                if (currentPlayer.Ai != null)
+                    Wait(waitTime);
+
+
+                // Changing players
+                currentPlayer = players[(GetNextPlayer(players.IndexOf(currentPlayer)))];
+              
+                allPassivePlayers = true;  
+                
+                foreach (var player in players)
+                {
+                    if (!player.IsPassive)
+                    {
+                        allPassivePlayers = false; 
+                    }
+                }
+            }
+
+            
+
+
+
 
         }
+
+        private void commentStupid()
+        {
+
+
+            //   DrawCustomCommunityCards(card1, card2, card3, card4, card5);
+            //   DealCustomCards(startingPlayer, card7, card8); 
+            //   int call = players[startingPlayer].makeDecision(cashToCall, pot.pot, players.Count, sharedCards.getCards());
+
+            //   Hand hand = CardEvaluator.eveluateHand(players[startingPlayer].HoleCards, sharedCards.getCards());
+            //   view.displayCardHandCombo(hand.HandName); 
+        }
+
+        // https://stackoverflow.com/questions/22158278/wait-some-seconds-without-blocking-ui-execution
+        private void Wait(int seconds)
+        {
+            if (seconds < 1) return;
+            DateTime dateTime = DateTime.Now.AddMilliseconds(seconds); 
+            while (DateTime.Now < dateTime)
+            {
+                System.Windows.Forms.Application.DoEvents();
+            }
+        }
+
+
 
         private void DrawFlop()
         {
             List<Card> cards = deck.drawCards(3);
             sharedCards.setFlop(cards);
-            view.displayFlop(cards[0].Image, cards[1].Image, cards[2].Image);
+            view.DisplayFlop(cards[0].Image, cards[1].Image, cards[2].Image);
         }
 
       
@@ -100,7 +311,7 @@ namespace CardGame.Texas_Hold_em.Controller
         {
             Card turnCard = deck.drawCard();
             sharedCards.setTurn(turnCard);
-            view.displayTurn(turnCard.Image);
+            view.DisplayTurn(turnCard.Image);
 
         }
 
@@ -120,10 +331,10 @@ namespace CardGame.Texas_Hold_em.Controller
             flopCards.Add(flop3);
 
             sharedCards.setFlop(flopCards);
-            view.displayFlop(flopCards[0].Image, flopCards[1].Image, flopCards[2].Image);
+            view.DisplayFlop(flopCards[0].Image, flopCards[1].Image, flopCards[2].Image);
 
             sharedCards.setTurn(turn);
-            view.displayTurn(turn.Image);
+            view.DisplayTurn(turn.Image);
 
             sharedCards.setRiver(river);
             view.displayRiver(river.Image);
@@ -139,57 +350,65 @@ namespace CardGame.Texas_Hold_em.Controller
         }
 
 
-        private int setUpFirstRound()
+        private int SetUpFirstRound()
         {
             assignNextDealer(); 
             deck.shuffleDeck();
             dealCards();
-            int bigBlindIndex = setBlinds();
-            updatePot(); 
+            int bigBlindIndex = SetBlinds();
+            GetTableBets(); 
             view.updateBoard();
             showPlayerCards(0);
            
             // only debugging
             showAllPlayerCards(); 
            
-            return getNextPlayer(bigBlindIndex);  
+            return GetNextPlayer(bigBlindIndex);  
         }
 
 
 
-        private int getNextPlayer(int playerIndex)
+        private int GetNextPlayer(int playerIndex)
         {
             int nextPlayerIndex = playerIndex + 1; 
             if (nextPlayerIndex >= players.Count)
             {
-                return 0;
+                if (players[0].HasFolded)
+                {
+                    return GetNextPlayer(0);
+                }
+                else
+                {
+                    return 0;
+
+                }
 
             }
             else
             {
-                return nextPlayerIndex;
+                if (players[nextPlayerIndex].HasFolded)
+                {
+                    return GetNextPlayer(nextPlayerIndex);
+                }
+                else
+                {
+                    return nextPlayerIndex;
+
+                }
             }
         }
         
 
-        private void startBetting(int startingPlayerIndex)
+        private void GetTableBets()
         {
-            Console.WriteLine(startingPlayerIndex + " ska börja");
-
-        }
-
-        private void updatePot()
-        {
-            int totalPot = 0;
             foreach (var player in players)
             {
-                totalPot += player.Bet; 
+                pot.pot += player.Bet; 
             }
 
-            pot.pot = totalPot; 
         }
 
-        private int setBlinds()
+        private int SetBlinds()
         {
             int i = currentDealer();
 
@@ -213,8 +432,8 @@ namespace CardGame.Texas_Hold_em.Controller
             }
 
 
-            players[smallBlindIndex].makeBet(smallBlind);
-            players[bigBlindIndex].makeBet(bigBlind);
+            players[smallBlindIndex].Raise(smallBlind);
+            players[bigBlindIndex].Raise(bigBlind);
             cashToCall = bigBlind; 
             return bigBlindIndex; 
 
@@ -294,7 +513,7 @@ namespace CardGame.Texas_Hold_em.Controller
          
             players[playerIndex].IsDealer = true;
 
-            view.displayDealer(playerIndex); 
+            view.DisplayDealer(playerIndex); 
 
         }
 
@@ -304,6 +523,7 @@ namespace CardGame.Texas_Hold_em.Controller
             view.displayPlayerCards(playerIndex, players[playerIndex].HoleCards.Card1.Image, players[playerIndex].HoleCards.Card2.Image);
 
         }
+
 
         private void showAllPlayerCards()
         {

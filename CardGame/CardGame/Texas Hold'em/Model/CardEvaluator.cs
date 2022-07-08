@@ -12,7 +12,7 @@ namespace CardGame.Texas_Hold_em.Model
         
 
         // Card 1 will always be higher than card 2
-        public static int eveluateStartingHand(HoleCards hand)
+        public static int EveluateStartingHand(HoleCards hand)
         {
             // Tiers are based on Phil Hellmuth's Play Poker Like the Pros (2003)
          //   Hand hand = new Hand(new Card(5, new Suit(Suit.CardSuit.Clubs)), new Card(6, new Suit(Suit.CardSuit.Clubs))); 
@@ -78,7 +78,122 @@ namespace CardGame.Texas_Hold_em.Model
             return 0; 
         }
 
-        internal static Hand eveluateHand(HoleCards holeCards, List<Card> cardsOnTable)
+        internal static void DecideWinner(List<Player> players, List<Card> cardsOnTable)
+        {
+            List<Hand> hands = new List<Hand>();
+
+            foreach (var player in players)
+            {
+                hands.Add(EveluateHand(player.HoleCards, cardsOnTable));
+                player.EndHand = EveluateHand(player.HoleCards, cardsOnTable); 
+            }
+
+            Hand winner = hands[0];
+            int winnerIndex = 0; 
+            for (int i = 1; i < hands.Count; i++)
+            {
+                 if(CompareHands(winner, hands[i]) == 2)
+                {
+                    winner = hands[i];
+                    winnerIndex = i; 
+                }
+            }
+
+            Console.WriteLine(winner.HandName);
+            Console.WriteLine(players[winnerIndex].Name + " is the winner!");
+
+        }
+
+        private static int CompareCards(Card card1, Card card2)
+        {
+            if(card1.Value > card2.Value)
+            {
+                return 1;
+            }
+            else if(card1.Value < card2.Value)
+            {
+                return 2;
+            }
+            else
+            {
+                return 0; 
+            }
+
+        }
+
+        private static int CompareHands(Hand hand1, Hand hand2)
+        {
+            if(hand1.HandValue == hand2.HandValue)
+            {
+
+
+                Console.WriteLine(hand1.HandName + " is the same as " + hand2.HandName);
+                Console.WriteLine("Comparing " + hand1.MainCard.print() + " with " + hand2.MainCard.print());
+
+                int bestCard = CompareCards(hand1.MainCard, hand2.MainCard);
+                if (bestCard == 0)
+                {
+
+
+                    if(hand1.Kickers.Count == 0)
+                    {
+                        return 0; 
+                    }
+
+                    Console.WriteLine("Comparing " + hand1.Kickers[0].print() + " with " + hand2.Kickers[0].print());
+
+                    bestCard = CompareCards(hand1.Kickers[0], hand2.Kickers[0]);
+
+                    // Tie
+                    if (bestCard == 0)
+                    {
+                        if (hand1.Kickers.Count == 1)
+                        {
+                            return 0;
+                        }
+                        Console.WriteLine("Comparing " + hand1.Kickers[1].print() + " with " + hand2.Kickers[1].print());
+
+                        bestCard = CompareCards(hand1.Kickers[1], hand2.Kickers[1]);
+                       
+                        // Tie
+                        if (bestCard == 0)
+                        {
+                            if (hand1.Kickers.Count == 2)
+                            {
+                                return 0;
+                            }
+                            bestCard = CompareCards(hand1.Kickers[2], hand2.Kickers[2]);
+                            Console.WriteLine("Comparing " + hand1.Kickers[2].print() + " with " + hand2.Kickers[2].print());
+
+                            // Tie
+                            if (bestCard == 0)
+                            {
+                                Console.WriteLine("exactlyt he same wt!!=");
+                                return 0;
+                            }
+                        }
+                    }
+                    Console.WriteLine(bestCard + " is the highest value!");
+                }
+                return bestCard;
+            }
+            else if (hand1.HandValue > hand2.HandValue)
+            {
+                Console.WriteLine(hand1.HandName +" is better than " + hand2.HandName);
+                return 1;
+            }
+            else
+            {
+                Console.WriteLine(hand2.HandName + " is better than " + hand1.HandName);
+
+                return 2; 
+            }
+
+
+
+        }
+
+        internal static Hand EveluateHand(HoleCards holeCards, List<Card> cardsOnTable)
         {
             List<Card> cards = new List<Card>();
               cards.Add(holeCards.Card1);
@@ -380,7 +495,6 @@ namespace CardGame.Texas_Hold_em.Model
             return null;
         }
 
-        // Done
         private static Hand isTwoPair(List<Card> cardsIn)
         {
             List<Card> cards = cardsIn.ToList();
@@ -419,16 +533,12 @@ namespace CardGame.Texas_Hold_em.Model
 
                 }
             }
-            Console.WriteLine(pairCounter);
             if (pairCounter == 2)
             {
 
                 kickers.Add(cards[0]);
 
-                Console.WriteLine(mainCard.print());
-                Console.WriteLine(kickers[0].print());
-                Console.WriteLine(kickers[1].print());
-
+              
 
                 return new Hand(3, mainCard, kickers); 
             }
@@ -438,7 +548,6 @@ namespace CardGame.Texas_Hold_em.Model
         }
 
 
-        // Done
         private static Hand isPair(List<Card> cardsIn)
         {
             // To not modify the origninal list

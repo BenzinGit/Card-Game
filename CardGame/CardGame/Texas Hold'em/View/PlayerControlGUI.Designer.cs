@@ -28,95 +28,142 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.checkButton = new System.Windows.Forms.Button();
             this.slider = new System.Windows.Forms.TrackBar();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.numeric = new System.Windows.Forms.NumericUpDown();
             this.hand = new System.Windows.Forms.Label();
+            this.foldButton = new System.Windows.Forms.Button();
+            this.betButton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.slider)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numeric)).BeginInit();
             this.SuspendLayout();
             // 
-            // button1
+            // checkButton
             // 
-            this.button1.Location = new System.Drawing.Point(197, 0);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Call";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(278, 0);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Raise";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(359, 0);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 2;
-            this.button3.Text = "Fold";
-            this.button3.UseVisualStyleBackColor = true;
+            this.checkButton.Enabled = false;
+            this.checkButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.checkButton.Location = new System.Drawing.Point(242, 24);
+            this.checkButton.Name = "checkButton";
+            this.checkButton.Size = new System.Drawing.Size(100, 39);
+            this.checkButton.TabIndex = 2;
+            this.checkButton.Text = "Check";
+            this.checkButton.UseVisualStyleBackColor = true;
+            this.checkButton.Click += new System.EventHandler(this.checkButton_Click);
             // 
             // slider
             // 
-            this.slider.Location = new System.Drawing.Point(197, 29);
+            this.slider.LargeChange = 100;
+            this.slider.Location = new System.Drawing.Point(524, 18);
+            this.slider.Maximum = 5000;
+            this.slider.Minimum = 50;
             this.slider.Name = "slider";
-            this.slider.Size = new System.Drawing.Size(237, 45);
+            this.slider.Size = new System.Drawing.Size(265, 45);
+            this.slider.SmallChange = 10;
             this.slider.TabIndex = 5;
+            this.slider.TickFrequency = 100;
+            this.slider.Value = 50;
+            this.slider.Scroll += new System.EventHandler(this.slider_Scroll);
             // 
-            // numericUpDown1
+            // numeric
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(440, 29);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(64, 20);
-            this.numericUpDown1.TabIndex = 7;
+            this.numeric.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numeric.Location = new System.Drawing.Point(454, 32);
+            this.numeric.Maximum = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            this.numeric.Minimum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.numeric.Name = "numeric";
+            this.numeric.Size = new System.Drawing.Size(64, 20);
+            this.numeric.TabIndex = 7;
+            this.numeric.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
             // 
             // hand
             // 
-            this.hand.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.hand.AutoSize = true;
             this.hand.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.hand.Location = new System.Drawing.Point(3, 26);
+            this.hand.Location = new System.Drawing.Point(20, 32);
             this.hand.Name = "hand";
             this.hand.Size = new System.Drawing.Size(71, 20);
             this.hand.TabIndex = 8;
             this.hand.Text = "One-Pair";
+            // 
+            // foldButton
+            // 
+            this.foldButton.BackColor = System.Drawing.SystemColors.ScrollBar;
+            this.foldButton.Enabled = false;
+            this.foldButton.Location = new System.Drawing.Point(136, 24);
+            this.foldButton.Name = "foldButton";
+            this.foldButton.Size = new System.Drawing.Size(100, 39);
+            this.foldButton.TabIndex = 9;
+            this.foldButton.Text = "Fold";
+            this.foldButton.UseVisualStyleBackColor = false;
+            this.foldButton.Click += new System.EventHandler(this.foldButton_Click);
+            // 
+            // betButton
+            // 
+            this.betButton.BackColor = System.Drawing.Color.DodgerBlue;
+            this.betButton.Enabled = false;
+            this.betButton.ForeColor = System.Drawing.SystemColors.Control;
+            this.betButton.Location = new System.Drawing.Point(348, 24);
+            this.betButton.Name = "betButton";
+            this.betButton.Size = new System.Drawing.Size(100, 39);
+            this.betButton.TabIndex = 10;
+            this.betButton.Text = "Raise";
+            this.betButton.UseVisualStyleBackColor = false;
+            this.betButton.Click += new System.EventHandler(this.betButton_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(795, 24);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(29, 13);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "All-in";
             // 
             // PlayerControlGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.betButton);
+            this.Controls.Add(this.foldButton);
             this.Controls.Add(this.hand);
-            this.Controls.Add(this.numericUpDown1);
+            this.Controls.Add(this.numeric);
             this.Controls.Add(this.slider);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.checkButton);
             this.Name = "PlayerControlGUI";
-            this.Size = new System.Drawing.Size(524, 67);
+            this.Size = new System.Drawing.Size(966, 74);
             ((System.ComponentModel.ISupportInitialize)(this.slider)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numeric)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.TrackBar slider;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
         public System.Windows.Forms.Label hand;
+        public System.Windows.Forms.Button checkButton;
+        public System.Windows.Forms.Button foldButton;
+        public System.Windows.Forms.Button betButton;
+        private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.TrackBar slider;
+        public System.Windows.Forms.NumericUpDown numeric;
     }
 }

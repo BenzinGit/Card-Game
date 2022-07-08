@@ -29,25 +29,7 @@ namespace CardGame.Texas_Hold_em.Model
 
         }
 
-        public Dictionary<string, Card> getAllCards()
-        {
-            Dictionary<string, Card> cards = new Dictionary<string, Card>();
-            
-            if(flop != null)
-            {
-                cards.Add("Flop1", flop[0]);
-                cards.Add("Flop2", flop[1]);
-                cards.Add("Flop3", flop[2]);
-            }
-            if(turn != null)
-            cards.Add("Turn", turn);
-            if(river != null)
-            cards.Add("River", river);
-
-            return cards;   
-           
-
-        }
+      
 
         public void setFlop(List<Card> cards)
         {
@@ -69,7 +51,7 @@ namespace CardGame.Texas_Hold_em.Model
 
             List<Card> cards = new List<Card>();
 
-            if (flop != null)
+            if (flop.Count != 0)
             {
                 cards.Add(flop[0]);
                 cards.Add(flop[1]);

@@ -11,18 +11,22 @@ namespace CardGame.Texas_Hold_em.Model
         private string name;
         private int cash;
         private HoleCards holeCards;
-      
+        private Boolean isPassive;
+        private Boolean hasFolded;
 
 
         private int bet; 
         private Boolean isDealer; 
-        private AI ai; 
+        private AI ai;
+        private Hand endHand; 
 
         public Player(string name)
         {
             this.name = name;
             holeCards = new HoleCards(null, null);
-            ai = new AI(); 
+            ai = new AI();
+            isPassive = false;
+            hasFolded = false; 
         }
 
         public string Name { get => name; set => name = value; }
@@ -31,33 +35,62 @@ namespace CardGame.Texas_Hold_em.Model
         public int Bet { get => bet; set => bet = value; }
     
         internal HoleCards HoleCards { get => holeCards; set => holeCards = value; }
-      
+        public bool IsPassive { get => isPassive; set => isPassive = value; }
+        internal AI Ai { get => ai; set => ai = value; }
+        public bool HasFolded { get => hasFolded; set => hasFolded = value; }
+        internal Hand EndHand { get => endHand; set => endHand = value; }
 
-        public void makeBet(int newBet)
+
+
+
+        // returns 1 = call
+        // returns >cashToCall = raise
+        // returns -1 = fold
+        internal int MakeDecision(int cashToCall, int pot, int playersLeft, List<Card> cardsOnTable)
         {
-            bet = newBet;
-            cash = cash - newBet;
+            
 
+                if (cardsOnTable.Count == 0)
+                {
+                    ai.MakeDecision(2);
+                    return 1;
+                }
+
+                else
+                {
+                    return 1;
+                }
+
+            
+            
 
         }
 
-        internal int makeDecision(int cashToCall, int pot, int playersLeft, List<Card> cardsOnTable)
+       
+
+
+
+        public void Call(int newBet)
+        {
+            int diff = newBet - bet;
+            bet = newBet;
+            cash = cash - diff;
+
+            isPassive = true;
+        }
+
+        public void Raise(int newBet)
         {
 
-            ai.evaluateStartingHand(holeCards);
+            bet = newBet + bet;
+            cash = cash - newBet;
 
-            if(cardsOnTable.Count == 0)
-            {
-                CardEvaluator.eveluateStartingHand(this.holeCards);
+        }
 
-            }
-            else
-            {
-
-
-            }
-            return 1; 
-
+        internal void Fold()
+        {
+            hasFolded = true;
+            isPassive = true;
 
         }
     }

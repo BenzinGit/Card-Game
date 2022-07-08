@@ -23,15 +23,15 @@ namespace CardGame.View
         {
             InitializeComponent();
 
-            startGame();
+            setUpPlayerGUI();
             controller = new Controller(this);
-            controller.setUpGame(); 
-
 
 
         }
 
-        public void startGame()
+        
+
+        public void setUpPlayerGUI()
         {
 
             playerList = new List<PlayerGUI>();
@@ -49,7 +49,7 @@ namespace CardGame.View
         
         }
 
-        public void displayFlop(string card1, string card2, string card3)
+        public void DisplayFlop(string card1, string card2, string card3)
         {
            community.setFlop(card1, card2, card3); 
 
@@ -57,10 +57,18 @@ namespace CardGame.View
 
        
 
-        public void displayTurn(string card)
+        public void DisplayTurn(string card)
         {
 
               community.setTurn(card); 
+        }
+
+        internal void RemoveBets()
+        {
+            foreach (var players in playerList)
+            {
+                players.setBet(0);  
+            }
         }
 
         public void displayRiver(string card)
@@ -83,13 +91,33 @@ namespace CardGame.View
 
         }
 
-        internal void highlightPlayer(int player)
+        internal void DisplayEndHands(List<Player> playersLeft)
         {
-            playerList[player].BackColor = Color.LimeGreen; 
+            for (int i = 0; i < playersLeft.Count; i++)
+            {
+                playerList[i].callSign.Visible = true; 
+                playerList[i].callSign.Text = playersLeft[i].EndHand.HandName;
+            
+
+                playerList[i].betIcon.Visible = false;
+
+            }
 
         }
 
-        internal void displayDealer(int playerIndex)
+        internal void HighlightPlayer(int playerIndex)
+        {
+            foreach (var player in playerList)
+            {
+                player.BackColor = Color.Transparent; 
+
+            }
+
+            playerList[playerIndex].BackColor = Color.LimeGreen; 
+
+        }
+
+        internal void DisplayDealer(int playerIndex)
         {
             foreach (var player in playerList)
             {
@@ -118,9 +146,53 @@ namespace CardGame.View
 
         }
 
+        internal void ChangeButtons(Boolean b, int cashToCall)
+        {
+            if (b)
+            {
+                playerControlGUI.checkButton.Text = ("Call (" + cashToCall+")");
+                playerControlGUI.betButton.Text = "Raise";    
+            }
+            else
+            {
+                playerControlGUI.checkButton.Text = "Check";
+                playerControlGUI.betButton.Text = "Bet";
+            }
+        }
+
+        internal void ResetControl()
+        {
+            playerControlGUI.Choice = 0;
+        }
+
+        internal void SetMaximumBet(int cash)
+        {
+            Console.WriteLine(cash + " maximum");
+            playerControlGUI.slider.Maximum = cash;
+            playerControlGUI.numeric.Maximum = cash; 
+        }
+
+        public int GetPlayerInput()
+        {
+            return playerControlGUI.Choice; 
+
+        }
+
         public void displayCardHandCombo(string text)
         {
             playerControlGUI.hand.Text = text; 
+        }
+
+        private void startButton_Click(object sender, EventArgs e)
+        {
+            startButton.Visible = false;
+
+            controller.PlayGame();
+        }
+
+        public void setCallSign(string text, int playerIndex)
+        {
+            playerList[playerIndex].callSign.Text = text; 
         }
     }
 }

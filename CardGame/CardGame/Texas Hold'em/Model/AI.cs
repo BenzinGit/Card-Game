@@ -16,11 +16,15 @@ namespace CardGame.Texas_Hold_em.Model
         }
         
 
-        public int evaluateStartingHand(HoleCards hand)
+        public int MakeDecision(int tier)
         {
 
-            return 2; 
+            return 1; 
         }
+
+
+
+      
 
     }
 }

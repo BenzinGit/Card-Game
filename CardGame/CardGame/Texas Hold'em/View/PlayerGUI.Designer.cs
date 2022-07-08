@@ -37,6 +37,7 @@
             this.card1 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.playerBet = new System.Windows.Forms.Label();
+            this.callSign = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dealerIcon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.betIcon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.card2)).BeginInit();
@@ -50,7 +51,7 @@
             this.name.BackColor = System.Drawing.Color.Transparent;
             this.name.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.name.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.name.Location = new System.Drawing.Point(7, 79);
+            this.name.Location = new System.Drawing.Point(-3, 80);
             this.name.Margin = new System.Windows.Forms.Padding(3);
             this.name.Name = "name";
             this.name.Padding = new System.Windows.Forms.Padding(3);
@@ -64,7 +65,7 @@
             this.playerCash.BackColor = System.Drawing.Color.Transparent;
             this.playerCash.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.playerCash.ForeColor = System.Drawing.Color.Lime;
-            this.playerCash.Location = new System.Drawing.Point(3, 104);
+            this.playerCash.Location = new System.Drawing.Point(-8, 101);
             this.playerCash.Margin = new System.Windows.Forms.Padding(3);
             this.playerCash.Name = "playerCash";
             this.playerCash.Padding = new System.Windows.Forms.Padding(3);
@@ -89,9 +90,9 @@
             // 
             this.dealerIcon.BackColor = System.Drawing.Color.Transparent;
             this.dealerIcon.Image = global::CardGame.Properties.Resources.dealer__1_;
-            this.dealerIcon.Location = new System.Drawing.Point(12, 0);
+            this.dealerIcon.Location = new System.Drawing.Point(41, 65);
             this.dealerIcon.Name = "dealerIcon";
-            this.dealerIcon.Size = new System.Drawing.Size(35, 31);
+            this.dealerIcon.Size = new System.Drawing.Size(30, 30);
             this.dealerIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.dealerIcon.TabIndex = 10;
             this.dealerIcon.TabStop = false;
@@ -132,7 +133,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::CardGame.Properties.Resources.man;
-            this.pictureBox1.Location = new System.Drawing.Point(9, 36);
+            this.pictureBox1.Location = new System.Drawing.Point(0, 36);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(50, 44);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -152,11 +153,25 @@
             this.playerBet.Size = new System.Drawing.Size(6, 25);
             this.playerBet.TabIndex = 11;
             // 
+            // callSign
+            // 
+            this.callSign.AutoSize = true;
+            this.callSign.BackColor = System.Drawing.Color.Transparent;
+            this.callSign.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.callSign.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.callSign.Location = new System.Drawing.Point(-4, -4);
+            this.callSign.Margin = new System.Windows.Forms.Padding(3);
+            this.callSign.Name = "callSign";
+            this.callSign.Padding = new System.Windows.Forms.Padding(3);
+            this.callSign.Size = new System.Drawing.Size(6, 29);
+            this.callSign.TabIndex = 12;
+            // 
             // PlayerGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Transparent;
+            this.Controls.Add(this.callSign);
             this.Controls.Add(this.playerBet);
             this.Controls.Add(this.dealerIcon);
             this.Controls.Add(this.betIcon);
@@ -167,7 +182,7 @@
             this.Controls.Add(this.playerCash);
             this.Controls.Add(this.pictureBox1);
             this.Name = "PlayerGUI";
-            this.Size = new System.Drawing.Size(173, 138);
+            this.Size = new System.Drawing.Size(173, 143);
             ((System.ComponentModel.ISupportInitialize)(this.dealerIcon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.betIcon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.card2)).EndInit();
@@ -185,8 +200,9 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         public System.Windows.Forms.Label playerCash;
         public System.Windows.Forms.Label bet;
-        private System.Windows.Forms.PictureBox betIcon;
         public System.Windows.Forms.PictureBox dealerIcon;
         public System.Windows.Forms.Label playerBet;
+        public System.Windows.Forms.Label callSign;
+        public System.Windows.Forms.PictureBox betIcon;
     }
 }
