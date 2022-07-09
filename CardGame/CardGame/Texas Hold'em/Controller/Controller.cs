@@ -15,7 +15,10 @@ namespace CardGame.Texas_Hold_em.Controller
         private int bigBlind = 50; 
         private int smallBlind = 25;
         private int cashToCall = 0;
-        private int waitTime = 50; 
+      
+        private int waitTime = 1000;
+        private int waitTimeEnd = 6000;
+
         private Deck deck; 
         private List<Player> players;
 
@@ -28,7 +31,6 @@ namespace CardGame.Texas_Hold_em.Controller
             this.view = view;
          
             players = new List<Player>();
-            deck = new Deck();
             sharedCards =  new SharedCards();
             pot = new Pot(); 
         }
@@ -37,45 +39,62 @@ namespace CardGame.Texas_Hold_em.Controller
         {
             setUpGame();
 
-            int startingPlayer = SetUpFirstRound();
+            while (true)
+            {
+                int startingPlayer = SetUpFirstRound();
+                PlayRound(startingPlayer);
+                Wait(waitTime);
 
-            // 1st round
-            PlayRound(startingPlayer);
-            Wait(waitTime);
+                startingPlayer = GetNextPlayer(CurrentDealer());
+                Console.WriteLine("Current dealer: " + CurrentDealer());
+                Console.WriteLine("Starting player: " + startingPlayer);
+                PrepareNextRound();
+                DrawFlop();
+                PlayRound(startingPlayer);
+                Wait(waitTime);
 
-            PrepareNextRound();
-            DrawFlop();
-            PlayRound(startingPlayer);
-            Wait(waitTime);
+                PrepareNextRound();
+                DrawTurn();
+                PlayRound(startingPlayer);
+                Wait(waitTime);
 
-            PrepareNextRound();
-            DrawTurn();
-            PlayRound(startingPlayer);
-            Wait(waitTime);
+                PrepareNextRound();
+                DrawRiver();
+                PlayRound(startingPlayer);
+                showAllPlayerCards();
 
-            PrepareNextRound();
-            DrawRiver();
-            PlayRound(startingPlayer);
+                Player winner = DecideWinner();
+                view.HighlightWinner(players.IndexOf(winner));
+                winner.Cash = winner.Cash + pot.pot;
+                pot.pot = 0;
+                view.updateBoard();
+                Wait(waitTimeEnd);
+                ResetRound();
+            }
 
-            DecideWinner(); 
+        }
+        private void ResetRound()
+        {
+            foreach (var player in players)
+            {
+                player.Bet = 0;
+                player.HasFolded = false;
+                player.IsPassive = false;
+            }
+
+            sharedCards.RemoveCards();
+
+            view.ResetRound();
+            view.HidePlayerCards();
 
 
         }
-
         private Player DecideWinner()
         {
-            List<Player> playersLeft = new List<Player>();
-            foreach (var player in players)
-            {
-                if (!player.HasFolded)
-                {
-                    playersLeft.Add(player);
-                }
-            }
 
-            CardEvaluator.DecideWinner(playersLeft, sharedCards.getCards());
-            view.DisplayEndHands(playersLeft); 
-            return players[0]; 
+            Player winner = CardEvaluator.DecideWinner(players, sharedCards.getCards());
+            view.DisplayEndHands(players); 
+            return winner; 
         }
 
         private void PrepareNextRound()
@@ -115,7 +134,7 @@ namespace CardGame.Texas_Hold_em.Controller
 
             // Assigning random dealer for game
             Random rand = new Random();
-            assignDealer(rand.Next(0, players.Count));
+            AssignDealer(rand.Next(0, players.Count));
 
             foreach (var player in players)
             {
@@ -273,17 +292,7 @@ namespace CardGame.Texas_Hold_em.Controller
 
         }
 
-        private void commentStupid()
-        {
-
-
-            //   DrawCustomCommunityCards(card1, card2, card3, card4, card5);
-            //   DealCustomCards(startingPlayer, card7, card8); 
-            //   int call = players[startingPlayer].makeDecision(cashToCall, pot.pot, players.Count, sharedCards.getCards());
-
-            //   Hand hand = CardEvaluator.eveluateHand(players[startingPlayer].HoleCards, sharedCards.getCards());
-            //   view.displayCardHandCombo(hand.HandName); 
-        }
+       
 
         // https://stackoverflow.com/questions/22158278/wait-some-seconds-without-blocking-ui-execution
         private void Wait(int seconds)
@@ -352,17 +361,15 @@ namespace CardGame.Texas_Hold_em.Controller
 
         private int SetUpFirstRound()
         {
-            assignNextDealer(); 
+            assignNextDealer();
+            deck = new Deck(); 
             deck.shuffleDeck();
-            dealCards();
+            DealCards();
             int bigBlindIndex = SetBlinds();
             GetTableBets(); 
             view.updateBoard();
             showPlayerCards(0);
-           
-            // only debugging
-            showAllPlayerCards(); 
-           
+                      
             return GetNextPlayer(bigBlindIndex);  
         }
 
@@ -410,7 +417,7 @@ namespace CardGame.Texas_Hold_em.Controller
 
         private int SetBlinds()
         {
-            int i = currentDealer();
+            int i = CurrentDealer();
 
             int smallBlindIndex = i + 1;
             int bigBlindIndex = i + 2;
@@ -462,21 +469,21 @@ namespace CardGame.Texas_Hold_em.Controller
 
         private void assignNextDealer()
         {
-            int i = currentDealer(); 
+            int i = CurrentDealer(); 
 
 
             if (i+1 == players.Count)
             {
-                assignDealer(0);
+                AssignDealer(0);
             }
             else
             {
-                assignDealer(i + 1);
+                AssignDealer(i + 1);
             }
 
         }
 
-        private int currentDealer()
+        private int CurrentDealer()
         {
             int i = 0; 
             foreach (var player in players)
@@ -491,7 +498,7 @@ namespace CardGame.Texas_Hold_em.Controller
 
         }
 
-        private void dealCards()
+        private void DealCards()
         {
             foreach (var player in players)
             {
@@ -503,7 +510,7 @@ namespace CardGame.Texas_Hold_em.Controller
 
  
 
-        private void assignDealer(int playerIndex)
+        private void AssignDealer(int playerIndex)
         {
 
             foreach (var player in players)
@@ -524,6 +531,11 @@ namespace CardGame.Texas_Hold_em.Controller
 
         }
 
+        private void HideOtherPlayerCards()
+        {
+            view.HidePlayerCards(); 
+
+        }
 
         private void showAllPlayerCards()
         {
@@ -531,7 +543,6 @@ namespace CardGame.Texas_Hold_em.Controller
             for(int i = 0; i < players.Count; i++)
             {
                 view.displayPlayerCards(i, players[i].HoleCards.Card1.Image, players[i].HoleCards.Card2.Image);
-
 
             }
 

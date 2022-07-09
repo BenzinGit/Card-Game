@@ -55,6 +55,15 @@ namespace CardGame.View
 
         }
 
+        public void HidePlayerCards()
+        {
+            for (int i = 1; i < 4; i++)
+            {
+                playerList[i].setCards("cardback", "cardback");
+
+            }
+        }
+
        
 
         public void DisplayTurn(string card)
@@ -75,6 +84,31 @@ namespace CardGame.View
         {
 
                community.setRiver(card); 
+        }
+
+        internal void HighlightWinner(int winnnerIndex)
+        {
+            foreach (var player in playerList)
+            {
+                player.BackColor = Color.Transparent;
+
+            }
+
+            playerList[winnnerIndex].BackColor = Color.Orange;
+        }
+
+        internal void ResetRound()
+        {
+            foreach (var player in playerList)
+            {
+                player.BackColor = Color.Transparent;
+                player.betIcon.Visible = true;
+                player.callSign.Text = ""; 
+            }
+            community.setPot(0);
+            community.RemoveCommunityCards(); 
+           
+
         }
 
         internal void setUpGame(List<Player> players, int startingCash)
@@ -167,7 +201,6 @@ namespace CardGame.View
 
         internal void SetMaximumBet(int cash)
         {
-            Console.WriteLine(cash + " maximum");
             playerControlGUI.slider.Maximum = cash;
             playerControlGUI.numeric.Maximum = cash; 
         }
@@ -180,7 +213,7 @@ namespace CardGame.View
 
         public void displayCardHandCombo(string text)
         {
-            playerControlGUI.hand.Text = text; 
+    //        playerControlGUI.hand.Text = text; 
         }
 
         private void startButton_Click(object sender, EventArgs e)

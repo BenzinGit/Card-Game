@@ -24,7 +24,7 @@ namespace CardGame.Texas_Hold_em.View
         }
 
 
-        public void removeCommunityCards()
+        public void RemoveCommunityCards()
         {
             flop1.Image = null;      
             flop2.Image = null;

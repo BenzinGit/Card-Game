@@ -31,7 +31,6 @@
             this.checkButton = new System.Windows.Forms.Button();
             this.slider = new System.Windows.Forms.TrackBar();
             this.numeric = new System.Windows.Forms.NumericUpDown();
-            this.hand = new System.Windows.Forms.Label();
             this.foldButton = new System.Windows.Forms.Button();
             this.betButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -92,16 +91,6 @@
             0,
             0});
             // 
-            // hand
-            // 
-            this.hand.AutoSize = true;
-            this.hand.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.hand.Location = new System.Drawing.Point(20, 32);
-            this.hand.Name = "hand";
-            this.hand.Size = new System.Drawing.Size(71, 20);
-            this.hand.TabIndex = 8;
-            this.hand.Text = "One-Pair";
-            // 
             // foldButton
             // 
             this.foldButton.BackColor = System.Drawing.SystemColors.ScrollBar;
@@ -144,7 +133,6 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.betButton);
             this.Controls.Add(this.foldButton);
-            this.Controls.Add(this.hand);
             this.Controls.Add(this.numeric);
             this.Controls.Add(this.slider);
             this.Controls.Add(this.checkButton);
@@ -158,7 +146,6 @@
         }
 
         #endregion
-        public System.Windows.Forms.Label hand;
         public System.Windows.Forms.Button checkButton;
         public System.Windows.Forms.Button foldButton;
         public System.Windows.Forms.Button betButton;

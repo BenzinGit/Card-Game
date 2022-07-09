@@ -21,7 +21,7 @@ namespace CardGame.Texas_Hold_em.Model
         }
 
 
-        public void removeCards()
+        public void RemoveCards()
         {
             flop.Clear();
             turn = null; 

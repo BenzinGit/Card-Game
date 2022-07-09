@@ -78,11 +78,21 @@ namespace CardGame.Texas_Hold_em.Model
             return 0; 
         }
 
-        internal static void DecideWinner(List<Player> players, List<Card> cardsOnTable)
+        internal static Player DecideWinner(List<Player> players, List<Card> cardsOnTable)
         {
             List<Hand> hands = new List<Hand>();
 
+            List<Player> playersLeft = new List<Player>();
             foreach (var player in players)
+            {
+                if (!player.HasFolded)
+                {
+                    playersLeft.Add(player);
+                }
+            }
+
+
+            foreach (var player in playersLeft)
             {
                 hands.Add(EveluateHand(player.HoleCards, cardsOnTable));
                 player.EndHand = EveluateHand(player.HoleCards, cardsOnTable); 
@@ -99,9 +109,8 @@ namespace CardGame.Texas_Hold_em.Model
                 }
             }
 
-            Console.WriteLine(winner.HandName);
-            Console.WriteLine(players[winnerIndex].Name + " is the winner!");
 
+            return players[winnerIndex]; 
         }
 
         private static int CompareCards(Card card1, Card card2)
@@ -126,21 +135,16 @@ namespace CardGame.Texas_Hold_em.Model
             if(hand1.HandValue == hand2.HandValue)
             {
 
-
-                Console.WriteLine(hand1.HandName + " is the same as " + hand2.HandName);
-                Console.WriteLine("Comparing " + hand1.MainCard.print() + " with " + hand2.MainCard.print());
-
                 int bestCard = CompareCards(hand1.MainCard, hand2.MainCard);
                 if (bestCard == 0)
                 {
 
 
-                    if(hand1.Kickers.Count == 0)
+                    if(hand1.Kickers == null || hand1.Kickers.Count == 0)
                     {
                         return 0; 
                     }
 
-                    Console.WriteLine("Comparing " + hand1.Kickers[0].print() + " with " + hand2.Kickers[0].print());
 
                     bestCard = CompareCards(hand1.Kickers[0], hand2.Kickers[0]);
 
@@ -151,7 +155,6 @@ namespace CardGame.Texas_Hold_em.Model
                         {
                             return 0;
                         }
-                        Console.WriteLine("Comparing " + hand1.Kickers[1].print() + " with " + hand2.Kickers[1].print());
 
                         bestCard = CompareCards(hand1.Kickers[1], hand2.Kickers[1]);
                        
@@ -163,28 +166,23 @@ namespace CardGame.Texas_Hold_em.Model
                                 return 0;
                             }
                             bestCard = CompareCards(hand1.Kickers[2], hand2.Kickers[2]);
-                            Console.WriteLine("Comparing " + hand1.Kickers[2].print() + " with " + hand2.Kickers[2].print());
 
                             // Tie
                             if (bestCard == 0)
                             {
-                                Console.WriteLine("exactlyt he same wt!!=");
                                 return 0;
                             }
                         }
                     }
-                    Console.WriteLine(bestCard + " is the highest value!");
                 }
                 return bestCard;
             }
             else if (hand1.HandValue > hand2.HandValue)
             {
-                Console.WriteLine(hand1.HandName +" is better than " + hand2.HandName);
                 return 1;
             }
             else
             {
-                Console.WriteLine(hand2.HandName + " is better than " + hand1.HandName);
 
                 return 2; 
             }
