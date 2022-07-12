@@ -9,6 +9,7 @@ namespace CardGame.Texas_Hold_em.Model
     internal class Player
     {
         private string name;
+        private int id; 
         private int cash;
         private HoleCards holeCards;
         private Boolean isPassive;
@@ -20,13 +21,14 @@ namespace CardGame.Texas_Hold_em.Model
         private AI ai;
         private Hand endHand; 
 
-        public Player(string name)
+        public Player(string name, int id)
         {
             this.name = name;
             holeCards = new HoleCards(null, null);
-            ai = new AI();
+            ai = new AI(this);
             isPassive = false;
             hasFolded = false; 
+            this.id = id;
         }
 
         public string Name { get => name; set => name = value; }
@@ -39,6 +41,7 @@ namespace CardGame.Texas_Hold_em.Model
         internal AI Ai { get => ai; set => ai = value; }
         public bool HasFolded { get => hasFolded; set => hasFolded = value; }
         internal Hand EndHand { get => endHand; set => endHand = value; }
+        public int Id { get => id; set => id = value; }
 
 
 
@@ -46,13 +49,13 @@ namespace CardGame.Texas_Hold_em.Model
         // returns 1 = call
         // returns >cashToCall = raise
         // returns -1 = fold
-        internal int MakeDecision(int cashToCall, int pot, int playersLeft, List<Card> cardsOnTable)
+        internal int MakeDecision(int cashToCall, int pot, List<Player> otherPlayers, List<Card> cardsOnTable)
         {
             
 
                 if (cardsOnTable.Count == 0)
                 {
-                    ai.MakeDecision(2);
+                    return ai.MakeDecision(cashToCall, pot, otherPlayers, cardsOnTable);
                     return 1;
                 }
 
@@ -60,9 +63,6 @@ namespace CardGame.Texas_Hold_em.Model
                 {
                     return 1;
                 }
-
-            
-            
 
         }
 

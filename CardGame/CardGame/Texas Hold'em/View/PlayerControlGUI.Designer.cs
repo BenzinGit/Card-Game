@@ -34,6 +34,8 @@
             this.foldButton = new System.Windows.Forms.Button();
             this.betButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.skipButton = new System.Windows.Forms.Button();
+            this.playButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.slider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numeric)).BeginInit();
             this.SuspendLayout();
@@ -125,11 +127,35 @@
             this.label1.TabIndex = 11;
             this.label1.Text = "All-in";
             // 
+            // skipButton
+            // 
+            this.skipButton.BackgroundImage = global::CardGame.Properties.Resources.skip;
+            this.skipButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.skipButton.Location = new System.Drawing.Point(69, 23);
+            this.skipButton.Name = "skipButton";
+            this.skipButton.Size = new System.Drawing.Size(40, 40);
+            this.skipButton.TabIndex = 12;
+            this.skipButton.UseVisualStyleBackColor = true;
+            this.skipButton.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // playButton
+            // 
+            this.playButton.BackgroundImage = global::CardGame.Properties.Resources.play;
+            this.playButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.playButton.Location = new System.Drawing.Point(22, 23);
+            this.playButton.Name = "playButton";
+            this.playButton.Size = new System.Drawing.Size(41, 40);
+            this.playButton.TabIndex = 13;
+            this.playButton.UseVisualStyleBackColor = true;
+            this.playButton.Click += new System.EventHandler(this.playButton_Click);
+            // 
             // PlayerControlGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
+            this.Controls.Add(this.playButton);
+            this.Controls.Add(this.skipButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.betButton);
             this.Controls.Add(this.foldButton);
@@ -152,5 +178,7 @@
         private System.Windows.Forms.Label label1;
         public System.Windows.Forms.TrackBar slider;
         public System.Windows.Forms.NumericUpDown numeric;
+        private System.Windows.Forms.Button skipButton;
+        private System.Windows.Forms.Button playButton;
     }
 }

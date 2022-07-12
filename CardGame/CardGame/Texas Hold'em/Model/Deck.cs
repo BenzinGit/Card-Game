@@ -38,6 +38,15 @@ namespace CardGame
              }
         }
 
+        public void AddCards(List<Card> cards)
+        {
+            foreach (var card in cards)
+            {
+                deck.Add(card); 
+            }
+
+        }
+
         public Card drawCard()
         {
 

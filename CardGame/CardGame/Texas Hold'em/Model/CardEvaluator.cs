@@ -9,13 +9,13 @@ namespace CardGame.Texas_Hold_em.Model
     internal static class CardEvaluator
     {
 
-        
+
 
         // Card 1 will always be higher than card 2
         public static int EveluateStartingHand(HoleCards hand)
         {
             // Tiers are based on Phil Hellmuth's Play Poker Like the Pros (2003)
-         //   Hand hand = new Hand(new Card(5, new Suit(Suit.CardSuit.Clubs)), new Card(6, new Suit(Suit.CardSuit.Clubs))); 
+            //   Hand hand = new Hand(new Card(5, new Suit(Suit.CardSuit.Clubs)), new Card(6, new Suit(Suit.CardSuit.Clubs))); 
 
             // TIER 1
             // Pair AA -> 99 
@@ -24,35 +24,35 @@ namespace CardGame.Texas_Hold_em.Model
 
                 return 1;
             }
-            
+
             // AK
             if (hand.Card1.Value == 14 && hand.Card2.Value == 13)
             {
 
-                return 1; 
+                return 1;
             }
-            
+
             // TIER 2
             // All pairs
             if (hand.Card1.NameValue == hand.Card2.NameValue)
             {
 
-                return 2; 
+                return 2;
             }
             // AQ
-            if(hand.Card1.Value == 14 && hand.Card2.Value == 12)
+            if (hand.Card1.Value == 14 && hand.Card2.Value == 12)
             {
 
-                return 2; 
+                return 2;
             }
 
             // A & J->8 Suited
-            if((hand.Card1.Value == 14 && hand.Card2.Value >= 8) && (hand.Card1.Suit.cardSuit == hand.Card2.Suit.cardSuit))
+            if ((hand.Card1.Value == 14 && hand.Card2.Value >= 8) && (hand.Card1.Suit.cardSuit == hand.Card2.Suit.cardSuit))
             {
 
-                return 2; 
+                return 2;
             }
-           
+
             // TIER 3
 
             if ((hand.Card1.Value == 14) && (hand.Card1.Suit.cardSuit == hand.Card2.Suit.cardSuit))
@@ -75,10 +75,90 @@ namespace CardGame.Texas_Hold_em.Model
 
             }
 
-            return 0; 
+            return 0;
         }
 
-        internal static Player DecideWinner(List<Player> players, List<Card> cardsOnTable)
+
+        public static List<Player> DecideWinner(List<Player> playersIn, List<Card> cardsOnTable)
+        {
+            List<Player> players = playersIn; 
+            List<Player> winners = new List<Player>(); 
+
+            foreach (var player in players)
+            {
+                if (!player.HasFolded)
+                {
+                    player.EndHand = EveluateHand(player.HoleCards, cardsOnTable);
+                    winners.Add(player);
+                }
+            }
+
+            winners = winners.OrderBy(winner => winner.EndHand.HandValue).Reverse().ToList();
+            List<Player> losers = new List<Player>();
+
+
+            for (int i = 0; i < winners.Count; i++)
+            {
+                if (winners[0].EndHand.HandValue != winners[i].EndHand.HandValue)
+                {
+                    losers.Add(winners[i]);
+                }
+            }
+         
+            winners = winners.Except(losers).ToList();
+            losers.Clear(); 
+
+            if(winners.Count > 1)
+            {
+                winners = winners.OrderBy(winner => winner.EndHand.MainCard.Value).Reverse().ToList();
+            
+                for (int i = 0; i < winners.Count; i++)
+                {
+                    if (winners[0].EndHand.MainCard.Value != winners[i].EndHand.MainCard.Value)
+                    {
+                        losers.Add(winners[i]); 
+                    }
+                }
+            }
+ 
+            winners = winners.Except(losers).ToList();
+            losers.Clear();
+
+
+            for (int k = 0; k < 2; k++)
+            {
+                if (winners.Count > 1)
+                {
+                    if (winners[0].EndHand.Kickers != null)
+                    {
+
+                        winners = winners.OrderBy(winner => winner.EndHand.Kickers[k].Value).Reverse().ToList();
+
+                        for (int i = 0; i < winners.Count; i++)
+                        {
+                            if (winners[0].EndHand.Kickers[k].Value != winners[i].EndHand.Kickers[k].Value)
+                            {
+                                losers.Add(winners[i]);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("no kickers left, the players have the same!");
+                    } 
+                }
+                winners = winners.Except(losers).ToList();
+                losers.Clear();
+
+            }
+
+
+            return winners; 
+        }
+
+
+
+        internal static Player DecideWinner2(List<Player> players, List<Card> cardsOnTable)
         {
             List<Hand> hands = new List<Hand>();
 
@@ -94,17 +174,28 @@ namespace CardGame.Texas_Hold_em.Model
 
             foreach (var player in playersLeft)
             {
-                hands.Add(EveluateHand(player.HoleCards, cardsOnTable));
-                player.EndHand = EveluateHand(player.HoleCards, cardsOnTable); 
+                var hand = EveluateHand(player.HoleCards, cardsOnTable); 
+                hands.Add(hand);
+                player.EndHand = hand; 
             }
 
-            Hand winner = hands[0];
+            Hand winnerHand = hands[0];
             int winnerIndex = 0; 
             for (int i = 1; i < hands.Count; i++)
             {
-                 if(CompareHands(winner, hands[i]) == 2)
+                // Det blir bara en vinnare, även om det teknsikt sätt kan vara mer, om händerna är lika. 
+                // En liista som tar bort de som inte " går vidare"
+
+               int w = CompareHands(winnerHand, hands[i]); 
+
+                if(w == 0)
                 {
-                    winner = hands[i];
+
+                }
+
+                 if (CompareHands(winnerHand, hands[i]) == 2)
+                {
+                    winnerHand = hands[i];
                     winnerIndex = i; 
                 }
             }
@@ -456,9 +547,9 @@ namespace CardGame.Texas_Hold_em.Model
                 {
 
                     if ((cards[i + 0].Value == (cards[i + 1].Value + 1)) &&
-                       (cards[i + 1].Value == (cards[i + 2].Value + 1)) &&
-                       (cards[i + 2].Value == (cards[i + 3].Value + 1)) &&
-                       (cards[i + 3].Value == (cards[i + 4].Value + 1)))
+                        (cards[i + 1].Value == (cards[i + 2].Value + 1)) &&
+                        (cards[i + 2].Value == (cards[i + 3].Value + 1)) &&
+                        (cards[i + 3].Value == (cards[i + 4].Value + 1)))
                     {
 
                         return new Hand(5, cards[i], null);

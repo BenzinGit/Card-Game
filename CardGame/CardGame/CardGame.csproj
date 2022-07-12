@@ -63,6 +63,7 @@
     <Compile Include="Texas Hold%27em\Model\Player.cs" />
     <Compile Include="Texas Hold%27em\Model\Pot.cs" />
     <Compile Include="Texas Hold%27em\Model\SharedCards.cs" />
+    <Compile Include="Texas Hold%27em\Testing\TestingController.cs" />
     <Compile Include="Texas Hold%27em\View\CommunityGUI.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -328,6 +329,11 @@
   <ItemGroup>
     <None Include="Resources\man.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\skip.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\play.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

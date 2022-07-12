@@ -11,13 +11,13 @@ namespace CardGame.Texas_Hold_em.Controller
 {
     internal class Controller
     {
-        private int startingCash = 5000;
+        private int startingCash = 1000;
         private int bigBlind = 50; 
         private int smallBlind = 25;
         private int cashToCall = 0;
       
-        private int waitTime = 1000;
-        private int waitTimeEnd = 6000;
+        private int waitTime = 50;
+        private int waitTimeEnd = 10000;
 
         private Deck deck; 
         private List<Player> players;
@@ -37,11 +37,16 @@ namespace CardGame.Texas_Hold_em.Controller
 
         public void PlayGame()
         {
-            setUpGame();
+            SetUpGame();
+            
 
             while (true)
             {
                 int startingPlayer = SetUpFirstRound();
+               
+                // remove
+                showAllPlayerCards();
+
                 PlayRound(startingPlayer);
                 Wait(waitTime);
 
@@ -63,16 +68,35 @@ namespace CardGame.Texas_Hold_em.Controller
                 PlayRound(startingPlayer);
                 showAllPlayerCards();
 
-                Player winner = DecideWinner();
-                view.HighlightWinner(players.IndexOf(winner));
-                winner.Cash = winner.Cash + pot.pot;
+                var winners = DecideWinner();
+                view.HighlightWinners(winners);
+
+                int winPotShare = pot.pot / winners.Count;
+
+                foreach (var player in winners)
+                {
+                    player.Cash = player.Cash + winPotShare;
+                }
+
                 pot.pot = 0;
                 view.updateBoard();
                 Wait(waitTimeEnd);
+                KickPlayers(); 
                 ResetRound();
             }
 
         }
+
+        private void KickPlayers()
+        {
+            foreach (var player in players)
+            {
+                if (player.Cash == 0){
+
+                }
+            }
+        }
+
         private void ResetRound()
         {
             foreach (var player in players)
@@ -85,16 +109,15 @@ namespace CardGame.Texas_Hold_em.Controller
             sharedCards.RemoveCards();
 
             view.ResetRound();
-            view.HidePlayerCards();
+        //    view.HidePlayerCards();
 
 
         }
-        private Player DecideWinner()
+        private List<Player> DecideWinner()
         {
-
-            Player winner = CardEvaluator.DecideWinner(players, sharedCards.getCards());
+            var winners = CardEvaluator.DecideWinner(players, sharedCards.getCards());
             view.DisplayEndHands(players); 
-            return winner; 
+            return winners; 
         }
 
         private void PrepareNextRound()
@@ -123,12 +146,12 @@ namespace CardGame.Texas_Hold_em.Controller
            
         }
 
-        private void setUpGame()
+        private void SetUpGame()
         {
-            players.Add(new Player("You"));
-            players.Add(new Player("Johnny"));
-            players.Add(new Player("Barry"));
-            players.Add(new Player("Jericho"));
+            players.Add(new Player("You", 0));
+            players.Add(new Player("Johnny", 1));
+            players.Add(new Player("Barry", 2));
+            players.Add(new Player("Jericho", 3));
             players[0].Ai = null;
 
 
@@ -168,7 +191,7 @@ namespace CardGame.Texas_Hold_em.Controller
                 if (currentPlayer.Ai != null)
                 {
                     Wait(waitTime);
-                    choice = currentPlayer.MakeDecision(cashToCall, pot.pot, players.Count, sharedCards.getCards());
+                    choice = currentPlayer.MakeDecision(cashToCall, pot.pot, players, sharedCards.getCards());
 
 
                 }
@@ -180,9 +203,19 @@ namespace CardGame.Texas_Hold_em.Controller
 
                     if(cashToCall > currentPlayer.Bet)
                     {
+                        
                         view.SetMaximumBet(currentPlayer.Cash);
+                        if(currentPlayer.Cash < cashToCall)
+                        {
+                            view.ChangeButtons(true, currentPlayer.Cash);
 
-                        view.ChangeButtons(true, cashToCall - currentPlayer.Bet);
+                        }
+                        else
+                        {
+                            view.ChangeButtons(true, cashToCall - currentPlayer.Bet);
+
+                        }
+
                     }
                     else
                     {
@@ -197,7 +230,7 @@ namespace CardGame.Texas_Hold_em.Controller
                     {
                         // waiting for player
                         choice = view.GetPlayerInput();
-                        Wait(100); 
+                        Wait(50); 
                     }
 
                     view.ResetControl();
@@ -220,7 +253,14 @@ namespace CardGame.Texas_Hold_em.Controller
                     }
 
                     int b = currentPlayer.Bet; 
-                    currentPlayer.Call(cashToCall);
+                    if(currentPlayer.Cash < cashToCall)
+                    {
+                        currentPlayer.Call(currentPlayer.Cash);
+                    }
+                    else
+                    {
+                        currentPlayer.Call(cashToCall);
+                    }
                     cashToCall = currentPlayer.Bet;
                     pot.pot = pot.pot + currentPlayer.Bet - b;
 
@@ -285,14 +325,16 @@ namespace CardGame.Texas_Hold_em.Controller
                 }
             }
 
-            
-
-
-
-
+           
         }
 
        
+
+        public void SetWaitTime(int time)
+        {
+            waitTime = time;    
+        }
+
 
         // https://stackoverflow.com/questions/22158278/wait-some-seconds-without-blocking-ui-execution
         private void Wait(int seconds)

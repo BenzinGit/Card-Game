@@ -1,5 +1,6 @@
 ﻿using CardGame.Texas_Hold_em.Controller;
 using CardGame.Texas_Hold_em.Model;
+using CardGame.Texas_Hold_em.Testing;
 using CardGame.Texas_Hold_em.View;
 using System;
 using System.Collections.Generic;
@@ -19,13 +20,15 @@ namespace CardGame.View
 
         private Controller controller;
         private List<PlayerGUI> playerList; 
+        
         public TexasHoldem()
         {
             InitializeComponent();
 
             setUpPlayerGUI();
-            controller = new Controller(this);
-
+             controller = new Controller(this);
+           // TestingController controller = new TestingController();
+           // controller.RunTest(); 
 
         }
 
@@ -80,10 +83,28 @@ namespace CardGame.View
             }
         }
 
+       
+
         public void displayRiver(string card)
         {
 
                community.setRiver(card); 
+        }
+
+        internal void HighlightWinners(List<Player> winners)
+        {
+            foreach (var player in playerList)
+            {
+                player.BackColor = Color.Transparent;
+
+            }
+
+            foreach (var winner in winners)
+            {
+                playerList[winner.Id].BackColor = Color.Orange;
+
+            }
+
         }
 
         internal void HighlightWinner(int winnnerIndex)
@@ -125,18 +146,17 @@ namespace CardGame.View
 
         }
 
-        internal void DisplayEndHands(List<Player> playersLeft)
+        internal void DisplayEndHands(List<Player> players)
         {
-            for (int i = 0; i < playersLeft.Count; i++)
+            for (int i = 0; i < players.Count; i++)
             {
-                playerList[i].callSign.Visible = true; 
-                playerList[i].callSign.Text = playersLeft[i].EndHand.HandName;
-            
-
-                playerList[i].betIcon.Visible = false;
-
+                if (!players[i].HasFolded)
+                {
+                    playerList[i].callSign.Visible = true;
+                    playerList[i].callSign.Text = players[i].EndHand.HandName;
+                    playerList[i].betIcon.Visible = false;
+                }
             }
-
         }
 
         internal void HighlightPlayer(int playerIndex)
@@ -226,6 +246,18 @@ namespace CardGame.View
         public void setCallSign(string text, int playerIndex)
         {
             playerList[playerIndex].callSign.Text = text; 
+        }
+        
+        public void Skip()
+        {
+
+            controller.SetWaitTime(0); 
+        }
+
+        internal void PlayNormalSpeed()
+        {
+            controller.SetWaitTime(1000);
+
         }
     }
 }

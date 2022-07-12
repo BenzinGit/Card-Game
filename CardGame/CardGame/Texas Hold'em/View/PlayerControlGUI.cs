@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CardGame.View;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,13 +13,14 @@ namespace CardGame.Texas_Hold_em.View
 {
     public partial class PlayerControlGUI : UserControl
     {
-        int choice;
+        private int choice;
+      //  private TexasHoldem main; 
 
         public PlayerControlGUI()
         {
             InitializeComponent();
             choice = 0;
-
+           // this.main = main; 
         }
 
 
@@ -57,6 +59,18 @@ namespace CardGame.Texas_Hold_em.View
         private void slider_Scroll(object sender, EventArgs e)
         {
             numeric.Value = slider.Value; 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+         //   main.Skip(); 
+
+
+        }
+
+        private void playButton_Click(object sender, EventArgs e)
+        {
+          //  main.PlayNormalSpeed()
         }
     }
 
