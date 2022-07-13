@@ -14,7 +14,7 @@ namespace CardGame.Texas_Hold_em.Model
         private HoleCards holeCards;
         private Boolean isPassive;
         private Boolean hasFolded;
-
+        private Boolean isBroke; 
 
         private int bet; 
         private Boolean isDealer; 
@@ -29,6 +29,7 @@ namespace CardGame.Texas_Hold_em.Model
             isPassive = false;
             hasFolded = false; 
             this.id = id;
+
         }
 
         public string Name { get => name; set => name = value; }
@@ -42,6 +43,8 @@ namespace CardGame.Texas_Hold_em.Model
         public bool HasFolded { get => hasFolded; set => hasFolded = value; }
         internal Hand EndHand { get => endHand; set => endHand = value; }
         public int Id { get => id; set => id = value; }
+        public bool IsBroke { get => isBroke; set => isBroke = value; }
+
 
 
 

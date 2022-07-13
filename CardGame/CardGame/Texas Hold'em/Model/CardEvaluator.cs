@@ -10,9 +10,103 @@ namespace CardGame.Texas_Hold_em.Model
     {
 
 
+        // Based on Chen formula, by Bill Chen 
+        public static int EveluateStartingHand(HoleCards hand)
+        {
+            double points = 0;
+            // Highest Card
+            switch (hand.Card1.Value)
+            {
+                // A
+                case 14:
+                points = 10;
+
+                    break;
+              
+                // K
+                case 13:
+                points = 8;
+                break;
+
+                // Q
+                case 12:
+                points = 7;
+
+                    break;
+               
+                // J
+                case 11:
+                points = 6;
+
+                    break;
+
+                default:
+                points = ((double)hand.Card1.Value / 2);
+
+                    break; 
+            }
+
+            // Pairs
+            if(hand.Card1.Value == hand.Card2.Value)
+            {
+                if(hand.Card1.Value > 5)
+                {
+                    points = points * 2;
+
+                }
+                else
+                {
+                    points = points + 5; 
+                }
+            }
+
+            // Suited
+            if (hand.Card1.Suit == hand.Card2.Suit)
+            {
+                points = points + 2; 
+            }
+
+
+            // Closeness
+            if ((hand.Card1.Value - hand.Card2.Value) == 1)
+            {
+                if(hand.Card1.Value < 12)
+                {
+                    points++; 
+                }
+
+            }
+
+            else if ((hand.Card1.Value - hand.Card2.Value) == 2)
+            {
+                points--;
+               
+                if (hand.Card1.Value < 12)
+                {
+                    points++;
+                }
+            }
+            else if ((hand.Card1.Value - hand.Card2.Value) == 3)
+            {
+                points = points - 2; 
+            }
+            else if ((hand.Card1.Value - hand.Card2.Value) == 4)
+            {
+                points = points - 4;
+            }
+            else if ((hand.Card1.Value - hand.Card2.Value) >= 5)
+            {
+                points = points - 5;
+            }
+
+
+            return (int) Math.Ceiling(points); 
+
+
+        }
 
         // Card 1 will always be higher than card 2
-        public static int EveluateStartingHand(HoleCards hand)
+        public static int EveluateStartingHand2(HoleCards hand)
         {
             // Tiers are based on Phil Hellmuth's Play Poker Like the Pros (2003)
             //   Hand hand = new Hand(new Card(5, new Suit(Suit.CardSuit.Clubs)), new Card(6, new Suit(Suit.CardSuit.Clubs))); 
@@ -82,14 +176,32 @@ namespace CardGame.Texas_Hold_em.Model
         public static List<Player> DecideWinner(List<Player> playersIn, List<Card> cardsOnTable)
         {
             List<Player> players = playersIn; 
-            List<Player> winners = new List<Player>(); 
+            List<Player> winners = new List<Player>();
+
+          
+
+            foreach (var player in players)
+            {
+                if (!player.HasFolded)
+                {
+                    winners.Add(player);
+                }
+
+            }
+
+            // If only 1 player left
+            if (winners.Count == 1)
+            {
+                winners[0].EndHand = new Hand(15, null, null); 
+                winners[0].EndHand.HandName = "Win by fold"; 
+                return winners;
+            }
 
             foreach (var player in players)
             {
                 if (!player.HasFolded)
                 {
                     player.EndHand = EveluateHand(player.HoleCards, cardsOnTable);
-                    winners.Add(player);
                 }
             }
 
@@ -129,7 +241,7 @@ namespace CardGame.Texas_Hold_em.Model
             {
                 if (winners.Count > 1)
                 {
-                    if (winners[0].EndHand.Kickers != null)
+                    if (winners[0].EndHand.Kickers != null && winners[0].EndHand.Kickers.Count > k)
                     {
 
                         winners = winners.OrderBy(winner => winner.EndHand.Kickers[k].Value).Reverse().ToList();
@@ -142,10 +254,7 @@ namespace CardGame.Texas_Hold_em.Model
                             }
                         }
                     }
-                    else
-                    {
-                        Console.WriteLine("no kickers left, the players have the same!");
-                    } 
+                     
                 }
                 winners = winners.Except(losers).ToList();
                 losers.Clear();
@@ -345,10 +454,16 @@ namespace CardGame.Texas_Hold_em.Model
         {
             List<Card> cards = cardsIn.ToList();
             List<Card> kickers = new List<Card>();
-            kickers.Add(cards[1]);
-            kickers.Add(cards[2]);
-            kickers.Add(cards[3]);
-            kickers.Add(cards[4]);
+
+            for (int i = 1; i < 4; i++)
+            {
+                
+                    kickers.Add(cards[i]);
+
+                
+            }
+
+           
 
             return new Hand(1, cards[0], kickers); 
         }

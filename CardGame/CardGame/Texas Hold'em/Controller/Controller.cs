@@ -2,10 +2,6 @@
 using CardGame.View;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace CardGame.Texas_Hold_em.Controller
 {
@@ -26,6 +22,8 @@ namespace CardGame.Texas_Hold_em.Controller
         private Pot pot; 
         private TexasHoldem view;
 
+        private int activePlayers; 
+
         public Controller(TexasHoldem view)
         {
             this.view = view;
@@ -43,56 +41,74 @@ namespace CardGame.Texas_Hold_em.Controller
             while (true)
             {
                 int startingPlayer = SetUpFirstRound();
-               
+
                 // remove
                 showAllPlayerCards();
 
+                // Preflop
                 PlayRound(startingPlayer);
                 Wait(waitTime);
 
-                startingPlayer = GetNextPlayer(CurrentDealer());
-                Console.WriteLine("Current dealer: " + CurrentDealer());
-                Console.WriteLine("Starting player: " + startingPlayer);
-                PrepareNextRound();
-                DrawFlop();
-                PlayRound(startingPlayer);
-                Wait(waitTime);
-
-                PrepareNextRound();
-                DrawTurn();
-                PlayRound(startingPlayer);
-                Wait(waitTime);
-
-                PrepareNextRound();
-                DrawRiver();
-                PlayRound(startingPlayer);
-                showAllPlayerCards();
-
-                var winners = DecideWinner();
-                view.HighlightWinners(winners);
-
-                int winPotShare = pot.pot / winners.Count;
-
-                foreach (var player in winners)
+                // Flop
+                if (activePlayers > 1)
                 {
-                    player.Cash = player.Cash + winPotShare;
+                    startingPlayer = GetNextPlayer(CurrentDealer());
+                    PrepareNextRound();
+                    DrawFlop();
+                    PlayRound(startingPlayer);
+                    Wait(waitTime);
+                }
+                // Turn
+
+                if (activePlayers > 1)
+                {
+                    PrepareNextRound();
+                    DrawTurn();
+                    PlayRound(startingPlayer);
+                    Wait(waitTime);
                 }
 
-                pot.pot = 0;
+                if (activePlayers > 1)
+                {
+
+                    // River
+                    PrepareNextRound();
+                    DrawRiver();
+                    PlayRound(startingPlayer);
+                    showAllPlayerCards();
+                }
+
+               
+                var winners = DecideWinner();
+                view.HighlightWinners(winners);
+                AwardPot(winners);
+
+
                 view.updateBoard();
                 Wait(waitTimeEnd);
-                KickPlayers(); 
+                KickBrokePlayers();
                 ResetRound();
             }
 
         }
 
-        private void KickPlayers()
+        private void AwardPot(List<Player> winners)
+        {
+            int winPotShare = pot.pot / winners.Count;
+
+            foreach (var player in winners)
+            {
+                player.Cash = player.Cash + winPotShare;
+            }
+
+        }
+
+        private void KickBrokePlayers()
         {
             foreach (var player in players)
             {
-                if (player.Cash == 0){
-
+                if (player.Cash <= 0){
+                    player.IsBroke = true; 
                 }
             }
         }
@@ -104,7 +120,13 @@ namespace CardGame.Texas_Hold_em.Controller
                 player.Bet = 0;
                 player.HasFolded = false;
                 player.IsPassive = false;
+                activePlayers++; 
+                if (!player.IsBroke)
+                {
+                    activePlayers++;
+                }
             }
+            pot.pot = 0;
 
             sharedCards.RemoveCards();
 
@@ -115,6 +137,7 @@ namespace CardGame.Texas_Hold_em.Controller
         }
         private List<Player> DecideWinner()
         {
+           
             var winners = CardEvaluator.DecideWinner(players, sharedCards.getCards());
             view.DisplayEndHands(players); 
             return winners; 
@@ -154,6 +177,7 @@ namespace CardGame.Texas_Hold_em.Controller
             players.Add(new Player("Jericho", 3));
             players[0].Ai = null;
 
+            activePlayers = players.Count; 
 
             // Assigning random dealer for game
             Random rand = new Random();
@@ -178,7 +202,7 @@ namespace CardGame.Texas_Hold_em.Controller
 
             while (!allPassivePlayers)
             {
-                if (currentPlayer.HasFolded)
+                if (currentPlayer.HasFolded || currentPlayer.IsBroke)
                 {
                     currentPlayer = players[GetNextPlayer(players.IndexOf(currentPlayer))]; 
                 }
@@ -272,6 +296,7 @@ namespace CardGame.Texas_Hold_em.Controller
                 {
                     currentPlayer.Fold();
                     view.setCallSign("Fold", players.IndexOf(currentPlayer));
+                    activePlayers--; 
 
                 }
                
@@ -280,7 +305,16 @@ namespace CardGame.Texas_Hold_em.Controller
                 {
                     int b = currentPlayer.Bet;
 
-                    currentPlayer.Raise(choice);
+                    if (currentPlayer.Cash < cashToCall)
+                    {
+                        currentPlayer.Raise(currentPlayer.Cash);
+                    }
+                    else
+                    {
+                        currentPlayer.Raise(choice);
+                    }
+
+
                     cashToCall = currentPlayer.Bet;
                     pot.pot = pot.pot + currentPlayer.Bet - b; 
 
@@ -288,7 +322,7 @@ namespace CardGame.Texas_Hold_em.Controller
 
                     foreach (var player in players)
                     {
-                        if (!player.HasFolded)
+                        if (!player.HasFolded || !player.IsBroke)
                         {
                             player.IsPassive = false;
 
@@ -311,11 +345,12 @@ namespace CardGame.Texas_Hold_em.Controller
                     Wait(waitTime);
 
 
+
+
                 // Changing players
                 currentPlayer = players[(GetNextPlayer(players.IndexOf(currentPlayer)))];
               
                 allPassivePlayers = true;  
-                
                 foreach (var player in players)
                 {
                     if (!player.IsPassive)
@@ -394,7 +429,7 @@ namespace CardGame.Texas_Hold_em.Controller
 
         private void DealCustomCards(int playerIndex, Card card1, Card card2)
         {
-            players[playerIndex].HoleCards.setCards(card1, card2);
+            players[playerIndex].HoleCards.SetCards(card1, card2);
             showPlayerCards(playerIndex);
 
 
@@ -420,7 +455,7 @@ namespace CardGame.Texas_Hold_em.Controller
         private int GetNextPlayer(int playerIndex)
         {
             int nextPlayerIndex = playerIndex + 1; 
-            if (nextPlayerIndex >= players.Count)
+            if (nextPlayerIndex >= players.Count || players[nextPlayerIndex].IsBroke)
             {
                 if (players[0].HasFolded)
                 {
@@ -435,7 +470,7 @@ namespace CardGame.Texas_Hold_em.Controller
             }
             else
             {
-                if (players[nextPlayerIndex].HasFolded)
+                if (players[nextPlayerIndex].HasFolded || players[nextPlayerIndex].IsBroke)
                 {
                     return GetNextPlayer(nextPlayerIndex);
                 }
@@ -544,7 +579,7 @@ namespace CardGame.Texas_Hold_em.Controller
         {
             foreach (var player in players)
             {
-                player.HoleCards.setCards(deck.drawCard(), deck.drawCard());     
+                player.HoleCards.SetCards(deck.drawCard(), deck.drawCard());     
                     
 
             }

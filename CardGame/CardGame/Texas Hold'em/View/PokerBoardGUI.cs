@@ -26,9 +26,9 @@ namespace CardGame.View
             InitializeComponent();
 
             setUpPlayerGUI();
-             controller = new Controller(this);
-           // TestingController controller = new TestingController();
-           // controller.RunTest(); 
+         //    controller = new Controller(this);
+            TestingController controller = new TestingController();
+            controller.RunTest(); 
 
         }
 

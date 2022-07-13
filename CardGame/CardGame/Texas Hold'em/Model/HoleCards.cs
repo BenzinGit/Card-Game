@@ -16,14 +16,15 @@ namespace CardGame.Texas_Hold_em.Model
         {
             if(card1 != null)
             {
-                setCards(card1, card2);
+                SetCards(card1, card2);
 
             }
 
 
         }
 
-        public void setCards(Card card1, Card card2)
+        // card1 will always be higher than card2
+        public void SetCards(Card card1, Card card2)
         {
             
 
@@ -42,7 +43,7 @@ namespace CardGame.Texas_Hold_em.Model
 
         }
 
-        internal Card Card1 { get => card1; set => card1 = value; }
-        internal Card Card2 { get => card2; set => card2 = value; }
+        internal Card Card1 { get => card1;  }
+        internal Card Card2 { get => card2;  }
     }
 }
