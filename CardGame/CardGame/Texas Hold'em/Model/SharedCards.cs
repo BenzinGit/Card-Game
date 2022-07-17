@@ -31,22 +31,22 @@ namespace CardGame.Texas_Hold_em.Model
 
       
 
-        public void setFlop(List<Card> cards)
+        public void SetFlop(List<Card> cards)
         {
             flop.AddRange(cards); 
         }
 
-        public void setTurn(Card card)
+        public void SetTurn(Card card)
         {
             this.turn = card; 
         }
 
-        public void setRiver(Card card)
+        public void SetRiver(Card card)
         {
             this.river = card; 
         }
 
-        public List<Card> getCards()
+        public List<Card> GetCards()
         {
 
             List<Card> cards = new List<Card>();

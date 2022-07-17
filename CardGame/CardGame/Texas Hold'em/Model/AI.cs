@@ -12,69 +12,140 @@ namespace CardGame.Texas_Hold_em.Model
         private Player player;
         private Boolean hasRaised;
         private int aggresiveIndex; 
+        private Random random;
         public AI(Player player)
         {
             this.player = player;
-            aggresiveIndex = 1; 
+            aggresiveIndex = 1;
+            random = new Random();
+            hasRaised = false; 
         }
         
 
-        
-
-        internal int MakeDecision(int cashToCall, int pot, List<Player> otherPlayers, List<Card> cardsOnTable)
+        internal int MakeDecision(int cashToCall, int pot, int bigBlind, List<Player> otherPlayers, List<Card> cardsOnTable)
         {
             if (cardsOnTable.Count == 0)
-            {
-
-                double choiceIndex = 50;
-               
-                int startingTier = CardEvaluator.EveluateStartingHand(player.HoleCards);
-               
-                if (startingTier == 1)
-                {
-                    choiceIndex = choiceIndex + (100 * aggresiveIndex);
-                }
-          
-                else if(startingTier == 2)
-                {
-                    choiceIndex = choiceIndex + (80 * aggresiveIndex);
-
-                }
-
-                else if(startingTier == 3)
-                {
-                    choiceIndex = choiceIndex + (50 * aggresiveIndex);
-
-                }
-          
-                double cashToBetRatio = 1 - (cashToCall - player.Bet) / (double)player.Cash;
-
-                Console.WriteLine(cashToBetRatio);
-
-                choiceIndex = (cashToBetRatio * choiceIndex); 
-                Console.WriteLine(choiceIndex);
-
-
-                if (choiceIndex >= 70)
-                {
-                    return 100; 
-                }
-                else if(choiceIndex >= 25 && choiceIndex < 70)
-                {
-                    return 1; 
-                }
-                else
-                {
-                    return -1; 
-                }
-
-
-               
-            
+           {
+                return StartingHandDecision(cashToCall, bigBlind);
             }
             else
             {
-                return 1; 
+                int chanceOfWinning = (int) (CardEvaluator.SimulateRound(player.HoleCards, cardsOnTable, otherPlayers.Count, 1000) * 100);
+                Console.WriteLine(player.Name + ": " + chanceOfWinning);
+
+                int choice = 1; 
+                if(chanceOfWinning > 30 + random.Next(1, 20))
+                {
+                    choice = (int)(((player.Cash / 20) * (chanceOfWinning / 10)) / 2) + (cashToCall);
+
+                }
+                else if (chanceOfWinning < 15)
+                {
+                    if (cashToCall < bigBlind * random.Next(1, 5))  
+                    {
+                        // Bluff
+                        if(random.Next(1, 10) == 5)
+                        {
+                            Console.WriteLine(player.Name + " is bluffing");
+                            choice = (int)(((player.Cash / 20) * (random.Next(10, 90) / 10))) + (cashToCall);
+                        }
+                        else
+                        {
+                            choice = 1; 
+                        }
+
+                    }
+                    else
+                    {
+
+                        choice = -1; 
+                    }
+
+                }
+                else
+                {
+                    // Bluff
+                    if (random.Next(1, 10) == 5)
+                    {
+                        Console.WriteLine(player.Name + " is bluffing");
+                        choice = (int)(((player.Cash / 20) * (random.Next(10, 90) / 10))) + (cashToCall);
+                    }
+
+                    choice = 1; 
+                }
+
+
+                if (choice > player.Cash)
+                {
+                    return player.Cash;
+                }
+                else
+                {
+                    return choice; 
+                }
+
+            }
+        }
+
+
+
+        private int StartingHandDecision(int cashToCall, int bigBlind)
+        {
+            int powerRating = CardEvaluator.EveluateStartingHand(player.HoleCards);
+
+
+            // if cashToCall == bigBlind or less
+            if (cashToCall <= bigBlind)
+            {
+                // if powerrating > 8-11 = Raise
+                if (powerRating > (8 + random.Next(3)))
+                {
+                    hasRaised = true;
+                    return bigBlind + ((player.Cash / 20) + ((bigBlind / 10) * (powerRating - 10) * random.Next(1, 5)));
+                }
+                // else check
+                else
+                {
+                    hasRaised = false; 
+                    return 1;
+                }
+
+            }
+
+            // if raised
+            else
+            {
+                // Call raise
+                if (powerRating > (5 + random.Next(4)))
+                {
+                    // Reraise
+                    if (powerRating >= 16 && !hasRaised)
+                    {
+                        hasRaised = true;
+                        return (player.Cash / 20) + ((bigBlind / 10) * (powerRating - 10) * random.Next(1, 5));
+                    }
+                    else if (cashToCall < bigBlind * random.Next(1, 4))
+                    {
+                        hasRaised = false; 
+
+                        return 1;
+
+                    }
+                    else
+                    {
+                        hasRaised = false; 
+                        return -1;
+                    }
+
+                }
+                // Fold
+                else
+                {
+                    hasRaised = false; 
+                    return -1;
+                }
+
+
             }
         }
     }

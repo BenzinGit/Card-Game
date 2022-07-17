@@ -17,11 +17,11 @@ namespace CardGame
         {
 
             deck = new List<Card>();
-            setUpDeck();
+            SetUpDeck();
         }
 
 
-        private void setUpDeck()
+        private void SetUpDeck()
         {
             List<Suit> suitList = new List<Suit>();
             suitList.Add(new Suit(Suit.CardSuit.Clubs));
@@ -47,7 +47,21 @@ namespace CardGame
 
         }
 
-        public Card drawCard()
+        internal void RemoveCard(Card cardIn)
+        {
+            deck.Remove(cardIn);
+
+            foreach (var card in deck)
+            {
+                if(cardIn.Value == card.Value && cardIn.Suit.cardSuit == card.Suit.cardSuit)
+                {
+                    deck.Remove(card);
+                    return; 
+                }
+            }
+        }
+
+        public Card DrawCard()
         {
 
             Card card = deck[0];
@@ -56,32 +70,32 @@ namespace CardGame
             return card;
         }
 
-        public List<Card> drawCards(int x)
+        public List<Card> DrawCards(int x)
         {
             List<Card> cards = new List<Card>();
 
             for (int i = 0; i < x; i++)
             {
-              cards.Add(drawCard());
+              cards.Add(DrawCard());
             }
 
             return cards;
         }
 
 
-        public int cardsLeft()
+        public int CardsLeft()
         {
             return deck.Count;
         }
 
 
 
-        public void shuffleDeck()
+        public void Shuffle()
         {
             Random random = new Random(); 
 
 
-            for (int i = 0; i < 52; i++)
+            for (int i = 0; i < deck.Count; i++)
             {
                 int randNum = random.Next(0, deck.Count);
                 Card temp = deck[i];
@@ -93,7 +107,7 @@ namespace CardGame
 
         }
 
-        public void printDeck()
+        public void PrintDeck()
         {
 
             foreach (var card in deck)

@@ -55,6 +55,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Texas Hold%27em\Controller\Controller.cs" />
+    <Compile Include="Texas Hold%27em\Controller\TexasHoldemController.cs" />
     <Compile Include="Texas Hold%27em\Model\AI.cs" />
     <Compile Include="Texas Hold%27em\Model\CardEvaluator.cs" />
     <Compile Include="Texas Hold%27em\Model\Hand.cs" />

@@ -12,6 +12,10 @@ namespace CardGame.Texas_Hold_em.View
 {
     public partial class PlayerGUI : UserControl
     {
+        private int id;
+
+        public int Id { get => id; set => id = value; }
+
         public PlayerGUI()
         {
             InitializeComponent();
@@ -21,9 +25,7 @@ namespace CardGame.Texas_Hold_em.View
         }
 
 
-        public void setName(string name)
-        {
-        }
+   
 
         public void setCash(int cash)
         {

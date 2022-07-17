@@ -10,7 +10,113 @@ namespace CardGame.Texas_Hold_em.Model
     {
 
 
-        // Based on Chen formula, by Bill Chen 
+        public static float SimulateRound(HoleCards handCards, List<Card> cardsOnTable, int playersN, int iterations)
+        {
+            Deck deck = new Deck(); 
+          
+            List<Player> players = new List<Player>();
+            for (int i = 0; i < playersN; i++)
+            {
+                players.Add(new Player("", i)); 
+            }
+
+            players[0].HoleCards.SetCards(handCards.Card1, handCards.Card2);
+           
+            deck.RemoveCard(handCards.Card1);
+            deck.RemoveCard(handCards.Card2);
+
+            foreach (var card in cardsOnTable)
+            {
+                deck.RemoveCard(card); 
+
+            }
+
+
+            List<Card> removedCards = new List<Card>();
+            List<Card> sharedCards = new List<Card>();
+
+            int victories = 0; 
+
+            for (int i = 0; i < iterations; i++)
+            {
+                sharedCards.AddRange(cardsOnTable);
+                deck.Shuffle();
+
+                for (int j = 1; j < playersN; j++)
+                {
+                    Card card1 = deck.DrawCard();
+                    Card card2 = deck.DrawCard();
+
+                    removedCards.Add(card1);
+                    removedCards.Add(card2);
+
+
+                    players[j].HoleCards.SetCards(card1, card2);
+                }
+
+                // Flop
+                if (sharedCards.Count < 3)
+                {
+                    Card flop1 = deck.DrawCard();
+                    Card flop2 = deck.DrawCard();
+                    Card flop3 = deck.DrawCard();
+                    removedCards.Add(flop1);
+                    removedCards.Add(flop2);
+                    removedCards.Add(flop3);
+                    sharedCards.Add(flop1);
+                    sharedCards.Add(flop2);
+                    sharedCards.Add(flop3);
+
+                }
+
+                // Turn
+                if (sharedCards.Count < 4)
+                {
+
+                    Card turn = deck.DrawCard();
+                    removedCards.Add(turn);
+                    sharedCards.Add(turn);
+
+                }
+
+                // River
+                if (sharedCards.Count < 5)
+                {
+
+                    Card river = deck.DrawCard();
+                    removedCards.Add(river);
+                    sharedCards.Add(river);
+
+                }
+
+
+
+
+                var winner = DecideWinner(players, sharedCards);
+                foreach (var player in winner)
+                {
+                    if(player.Id == 0)
+                    {
+                        victories++;
+                    }
+                  
+
+                }
+
+                deck.AddCards(removedCards);
+                removedCards.Clear();
+                sharedCards.Clear();
+
+            }
+
+
+            float m = (float) victories / iterations;
+            return m; 
+
+
+        }
+
+        // Based on Chen formula, by Bill Chen (20 - -1).
         public static int EveluateStartingHand(HoleCards hand)
         {
             double points = 0;
@@ -99,7 +205,6 @@ namespace CardGame.Texas_Hold_em.Model
                 points = points - 5;
             }
 
-
             return (int) Math.Ceiling(points); 
 
 
@@ -178,7 +283,6 @@ namespace CardGame.Texas_Hold_em.Model
             List<Player> players = playersIn; 
             List<Player> winners = new List<Player>();
 
-          
 
             foreach (var player in players)
             {

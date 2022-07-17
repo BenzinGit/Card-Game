@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,24 +18,25 @@ namespace CardGame.View
     public partial class TexasHoldem : UserControl
     {
 
-
         private Controller controller;
+
+        private TexasHoldemController controller2; 
         private List<PlayerGUI> playerList; 
         
         public TexasHoldem()
         {
             InitializeComponent();
 
-            setUpPlayerGUI();
-         //    controller = new Controller(this);
-            TestingController controller = new TestingController();
-            controller.RunTest(); 
-
+            SetUpPlayerGUI();
+           // controller = new Controller(this);
+           // TestingController Tcontroller = new TestingController();
+            //  Tcontroller.RunTest(); 
+            controller2 = new TexasHoldemController(this); 
         }
 
         
 
-        public void setUpPlayerGUI()
+        public void SetUpPlayerGUI()
         {
 
             playerList = new List<PlayerGUI>();
@@ -46,14 +48,22 @@ namespace CardGame.View
 
         }
 
-        public void displayPlayerCards(int player, string card1, string card2)
+        internal void DisplayPlayerCards(Player playerIn, string card1, string card2)
         {
-            playerList[player].setCards(card1, card2);
+            foreach (var player in playerList)
+            {
+                     if(player.Id == playerIn.Id)
+                    {
+                          player.setCards(card1, card2);
+
+                    }
+            }
         
         }
 
         public void DisplayFlop(string card1, string card2, string card3)
         {
+            PlaySound("cardflip"); 
            community.setFlop(card1, card2, card3); 
 
         }
@@ -66,13 +76,18 @@ namespace CardGame.View
 
             }
         }
+        public void UpdatePot(int pot)
+        {
 
+            community.setPot(pot); 
+        }
        
 
         public void DisplayTurn(string card)
         {
+            PlaySound("cardflip");
 
-              community.setTurn(card); 
+            community.setTurn(card); 
         }
 
         internal void RemoveBets()
@@ -87,8 +102,9 @@ namespace CardGame.View
 
         public void displayRiver(string card)
         {
+            PlaySound("cardflip");
 
-               community.setRiver(card); 
+            community.setRiver(card); 
         }
 
         internal void HighlightWinners(List<Player> winners)
@@ -104,7 +120,7 @@ namespace CardGame.View
                 playerList[winner.Id].BackColor = Color.Orange;
 
             }
-
+            PlaySound("win"); 
         }
 
         internal void HighlightWinner(int winnnerIndex)
@@ -132,19 +148,21 @@ namespace CardGame.View
 
         }
 
-        internal void setUpGame(List<Player> players, int startingCash)
+        internal void SetUpGame(List<Player> players)
         {
-
+            int i = 0;
             community.setPot(0);
-            int i = 0; 
+
             foreach (var player in playerList)
             {
-                player.playerCash.Text = ("$"+startingCash.ToString());
                 player.name.Text = players[i].Name;
-                i++; 
+                player.Id = players[i].Id;
+
+                i++;
             }
 
         }
+
 
         internal void DisplayEndHands(List<Player> players)
         {
@@ -159,30 +177,55 @@ namespace CardGame.View
             }
         }
 
-        internal void HighlightPlayer(int playerIndex)
+        internal void HighlightPlayer(Player playerIn)
         {
             foreach (var player in playerList)
             {
-                player.BackColor = Color.Transparent; 
 
+                player.BackColor = Color.Transparent; 
+                if(player.Id == playerIn.Id)
+                {
+                    player.BackColor = Color.Green;
+                }
             }
 
-            playerList[playerIndex].BackColor = Color.LimeGreen; 
+
+
 
         }
 
-        internal void DisplayDealer(int playerIndex)
+        internal void DisplayDealer(Player dealer)
         {
             foreach (var player in playerList)
             {
                 player.dealerIcon.Visible = false; 
+
             }
 
-            playerList[playerIndex].dealerIcon.Visible = true; 
+
+            playerList[dealer.Id].dealerIcon.Visible = true; 
 
         }
 
-        public void updateBoard()
+        internal void UpdatePlayers(List<Player> players)
+        {
+            int i = 0;
+            foreach (var player in players)
+            {
+                if(player.Id == playerList[i].Id)
+                {
+                    playerList[i].setCash(player.Cash);
+                    playerList[i].setBet(player.Bet);
+
+                }
+                i++; 
+            }
+
+
+        }
+
+
+        public void UpdateBoard()
         {
             int i = 0;
             foreach (var player in playerList)
@@ -238,16 +281,41 @@ namespace CardGame.View
 
         private void startButton_Click(object sender, EventArgs e)
         {
+          
             startButton.Visible = false;
-
-            controller.PlayGame();
+            controller2.PlayGame();
+          
         }
 
-        public void setCallSign(string text, int playerIndex)
+        private void PlaySound(string soundEffect)
+        {
+            SoundPlayer simpleSound = new SoundPlayer("../../Sounds/"+soundEffect+".wav");
+            simpleSound.Play();
+
+        }
+
+        public void SetCallSign(string text, int playerIndex)
         {
             playerList[playerIndex].callSign.Text = text; 
+
+          
+            if(text == "Raise")
+            {
+                PlaySound("chipdrop"); 
+            }
         }
-        
+
+        internal void FoldPlayer(Player currentPlayer)
+        {
+            foreach (var player in playerList)
+            {
+                if(player.Id == currentPlayer.Id)
+                {
+                    player.BackColor = Color.Gray; 
+                }
+            }
+        }
+
         public void Skip()
         {
 

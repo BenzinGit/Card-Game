@@ -52,20 +52,11 @@ namespace CardGame.Texas_Hold_em.Model
         // returns 1 = call
         // returns >cashToCall = raise
         // returns -1 = fold
-        internal int MakeDecision(int cashToCall, int pot, List<Player> otherPlayers, List<Card> cardsOnTable)
+        internal int MakeDecision(int cashToCall, int pot, int bigBlind, List<Player> otherPlayers, List<Card> cardsOnTable)
         {
             
-
-                if (cardsOnTable.Count == 0)
-                {
-                    return ai.MakeDecision(cashToCall, pot, otherPlayers, cardsOnTable);
-                    return 1;
-                }
-
-                else
-                {
-                    return 1;
-                }
+                    return ai.MakeDecision(cashToCall, pot, bigBlind, otherPlayers, cardsOnTable);
+               
 
         }
 
