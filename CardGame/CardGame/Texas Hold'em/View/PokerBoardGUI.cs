@@ -29,9 +29,9 @@ namespace CardGame.View
 
             SetUpPlayerGUI();
            // controller = new Controller(this);
-           // TestingController Tcontroller = new TestingController();
-            //  Tcontroller.RunTest(); 
-            controller2 = new TexasHoldemController(this); 
+            TestingController Tcontroller = new TestingController();
+             Tcontroller.RunTest(); 
+         //   controller2 = new TexasHoldemController(this); 
         }
 
         

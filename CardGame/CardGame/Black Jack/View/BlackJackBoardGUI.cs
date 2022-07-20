@@ -8,24 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace CardGame
+namespace CardGame.Black_Jack.View
 {
-    public partial class MainMenu : UserControl
+    public partial class BlackJackBoardGUI : UserControl
     {
-
-
-        public MainMenu()
+        public BlackJackBoardGUI()
         {
-
             InitializeComponent();
-
-
         }
 
-        private void texasButton_Click(object sender, EventArgs e)
+        private void BlackJackBoardGUI_Load(object sender, EventArgs e)
         {
-          
-            
+
         }
     }
 }

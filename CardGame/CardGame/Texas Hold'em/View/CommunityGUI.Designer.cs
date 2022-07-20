@@ -50,9 +50,9 @@
             this.pot.ForeColor = System.Drawing.Color.Yellow;
             this.pot.Location = new System.Drawing.Point(3, 59);
             this.pot.Name = "pot";
-            this.pot.Size = new System.Drawing.Size(67, 26);
+            this.pot.Size = new System.Drawing.Size(34, 26);
             this.pot.TabIndex = 6;
-            this.pot.Text = "$5000";
+            this.pot.Text = "$0";
             // 
             // pictureBox1
             // 

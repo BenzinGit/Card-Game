@@ -30,7 +30,11 @@ namespace CardGame.Texas_Hold_em.Model
                 deck.RemoveCard(card); 
 
             }
+           
 
+            
+
+            
 
             List<Card> removedCards = new List<Card>();
             List<Card> sharedCards = new List<Card>();
@@ -102,7 +106,6 @@ namespace CardGame.Texas_Hold_em.Model
                   
 
                 }
-
                 deck.AddCards(removedCards);
                 removedCards.Clear();
                 sharedCards.Clear();
@@ -760,9 +763,8 @@ namespace CardGame.Texas_Hold_em.Model
                 // Removes dublicates of cards by value 
                 // https://stackoverflow.com/questions/9993172/remove-objects-with-a-duplicate-property-from-list
                 cards = cards.GroupBy(card => card.Value).Select(card => card.First()).ToList();
-
-
-                for (int i = 0; i < cards.Count - 4; i++)
+       
+            for (int i = 0; i < cards.Count - 4; i++)
                 {
 
                     if ((cards[i + 0].Value == (cards[i + 1].Value + 1)) &&
@@ -775,7 +777,25 @@ namespace CardGame.Texas_Hold_em.Model
 
                     }
                 }
-                return null; 
+
+            // A -> 5
+
+            if (cards[0].AltValue == 1)
+            {
+                cards = cards.OrderBy(card => card.Value).ToList();
+
+
+                if ( cards[0].Value == 2 &&
+                     cards[1].Value == 3 &&
+                     cards[2].Value == 4 &&
+                     cards[3].Value == 5)
+                {
+                    return new Hand(5, cards[3], null);
+                }
+
+            }
+
+            return null; 
                 
 
         }

@@ -14,6 +14,7 @@ namespace CardGame.Texas_Hold_em.Model
 
         private Suit suit; 
         private int value;
+        private int altValue; 
         private string nameValue;
         private string image; 
         
@@ -48,6 +49,10 @@ namespace CardGame.Texas_Hold_em.Model
             if (suit == "diamonds")
                 this.suit = new Suit(Suit.CardSuit.Diamonds);
 
+            if(value == 14)
+            {
+                altValue = 1; 
+            }
             assignValueName();
             assignImage();
 
@@ -58,6 +63,7 @@ namespace CardGame.Texas_Hold_em.Model
         public string NameValue { get => nameValue; set => nameValue = value; }
         public string Image { get => image; set => image = value; }
         internal Suit Suit { get => suit; set => suit = value; }
+        public int AltValue { get => altValue; set => altValue = value; }
 
         private void assignValueName()
         {

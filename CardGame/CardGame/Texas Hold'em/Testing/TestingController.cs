@@ -55,37 +55,35 @@ namespace CardGame.Texas_Hold_em.Testing
 
         public void RunTest()
         {
-            Card cardA = new Card(10, "spades");
-            Card cardB = new Card(10, "hearts");
+            Card cardA = new Card(14, "spades");
+            Card cardB = new Card(14, "hearts");
             deck.Shuffle(); 
-             cardA = deck.DrawCard(); 
-            cardB = deck.DrawCard();
+             
 
-            Console.WriteLine(cardA.print());
-            Console.WriteLine(cardB.print());
 
             List<Card> sharedCards = new List<Card>();
 
-           Card card1 = new Card(10, "diamonds");
-           Card card2 = new Card(2, "spades");
+           Card card1 = new Card(14, "diamonds");
+           Card card2 = new Card(7, "hearts");
           
-           Card card3 = new Card(7, "hearts");
+           Card card3 = new Card(2, "spades");
 
-          Card card4  = new Card(13, "diamonds");
-          Card card5 = new Card(6, "clubs");
+          Card card4  = new Card(3, "hearts");
+          Card card5 = new Card(4, "clubs");
 
             
 
-       //     sharedCards.Add(card1);
-       //     sharedCards.Add(card2);
-        //    sharedCards.Add(card3);
-           // sharedCards.Add(card4);
-            // sharedCards.Add(card5);
+            sharedCards.Add(card1);
+            sharedCards.Add(card2);
+            sharedCards.Add(card3);
+          //  sharedCards.Add(card4);
+          //  sharedCards.Add(card5);
           
-            HoleCards holeCards = new HoleCards(cardA, cardB); 
-
-            CardEvaluator.SimulateRound(holeCards, sharedCards, 2, 100000); 
-
+            HoleCards holeCards = new HoleCards(cardA, cardB);
+           var h =  CardEvaluator.EveluateHand(holeCards, sharedCards); 
+            var f = CardEvaluator.SimulateRound(holeCards, sharedCards, 24, 10000);
+            Console.WriteLine(h.HandName);
+            Console.WriteLine(f);
 
 
         }

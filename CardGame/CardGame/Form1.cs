@@ -23,7 +23,21 @@ namespace CardGame
 
         private void texasHoldem1_Load(object sender, EventArgs e)
         {
+       
+        }
 
+        private void texasButton_Click(object sender, EventArgs e)
+        {
+            texasHoldem1.Visible = true;
+            texasButton.Visible = false;
+            blackButton.Visible = false;
+        }
+
+        private void blackButton_Click(object sender, EventArgs e)
+        {
+            blackJackBoardGUI1.Visible = true;  
+            texasButton.Visible = false;
+            blackButton.Visible = false;
         }
     }
 }

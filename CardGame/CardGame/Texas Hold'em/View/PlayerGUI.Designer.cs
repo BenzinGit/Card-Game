@@ -55,9 +55,8 @@
             this.name.Margin = new System.Windows.Forms.Padding(3);
             this.name.Name = "name";
             this.name.Padding = new System.Windows.Forms.Padding(3);
-            this.name.Size = new System.Drawing.Size(51, 24);
+            this.name.Size = new System.Drawing.Size(6, 24);
             this.name.TabIndex = 6;
-            this.name.Text = "Pedro";
             // 
             // playerCash
             // 
@@ -69,9 +68,9 @@
             this.playerCash.Margin = new System.Windows.Forms.Padding(3);
             this.playerCash.Name = "playerCash";
             this.playerCash.Padding = new System.Windows.Forms.Padding(3);
-            this.playerCash.Size = new System.Drawing.Size(66, 29);
+            this.playerCash.Size = new System.Drawing.Size(36, 29);
             this.playerCash.TabIndex = 3;
-            this.playerCash.Text = "$1000";
+            this.playerCash.Text = "$0";
             // 
             // bet
             // 
