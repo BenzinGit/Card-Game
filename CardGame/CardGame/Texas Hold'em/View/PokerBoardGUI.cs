@@ -1,4 +1,5 @@
-﻿using CardGame.Texas_Hold_em.Controller;
+﻿using CardGame.Black_Jack.Controller;
+using CardGame.Texas_Hold_em.Controller;
 using CardGame.Texas_Hold_em.Model;
 using CardGame.Texas_Hold_em.Testing;
 using CardGame.Texas_Hold_em.View;
@@ -20,7 +21,7 @@ namespace CardGame.View
 
         private Controller controller;
 
-        private TexasHoldemController controller2; 
+        private TexasHoldemController texasController;
         private List<PlayerGUI> playerList; 
         
         public TexasHoldem()
@@ -29,9 +30,9 @@ namespace CardGame.View
 
             SetUpPlayerGUI();
            // controller = new Controller(this);
-            TestingController Tcontroller = new TestingController();
-             Tcontroller.RunTest(); 
-         //   controller2 = new TexasHoldemController(this); 
+        //    TestingController Tcontroller = new TestingController();
+        //     Tcontroller.RunTest(); 
+            texasController = new TexasHoldemController(this);
         }
 
         
@@ -283,7 +284,7 @@ namespace CardGame.View
         {
           
             startButton.Visible = false;
-            controller2.PlayGame();
+            texasController.PlayGame();
           
         }
 

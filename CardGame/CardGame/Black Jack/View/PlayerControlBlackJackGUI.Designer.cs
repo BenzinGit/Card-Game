@@ -45,11 +45,13 @@
             this.doubleButton.Name = "doubleButton";
             this.doubleButton.Size = new System.Drawing.Size(100, 39);
             this.doubleButton.TabIndex = 11;
-            this.doubleButton.Text = "Double Down";
+            this.doubleButton.Text = "Bet";
             this.doubleButton.UseVisualStyleBackColor = false;
+            this.doubleButton.Click += new System.EventHandler(this.doubleButton_Click);
             // 
             // hitButton
             // 
+            this.hitButton.Enabled = false;
             this.hitButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.hitButton.Location = new System.Drawing.Point(229, 28);
             this.hitButton.Name = "hitButton";
@@ -57,16 +59,19 @@
             this.hitButton.TabIndex = 12;
             this.hitButton.Text = "Hit";
             this.hitButton.UseVisualStyleBackColor = true;
+            this.hitButton.Click += new System.EventHandler(this.hitButton_Click);
             // 
             // standButton
             // 
             this.standButton.BackColor = System.Drawing.SystemColors.ScrollBar;
+            this.standButton.Enabled = false;
             this.standButton.Location = new System.Drawing.Point(123, 28);
             this.standButton.Name = "standButton";
             this.standButton.Size = new System.Drawing.Size(100, 39);
             this.standButton.TabIndex = 13;
             this.standButton.Text = "Stand";
             this.standButton.UseVisualStyleBackColor = false;
+            this.standButton.Click += new System.EventHandler(this.standButton_Click);
             // 
             // numeric
             // 
@@ -107,6 +112,7 @@
             this.slider.TabIndex = 15;
             this.slider.TickFrequency = 100;
             this.slider.Value = 50;
+            this.slider.Scroll += new System.EventHandler(this.slider_Scroll);
             // 
             // PlayerControlBlackJackGUI
             // 
@@ -129,9 +135,9 @@
         #endregion
 
         public System.Windows.Forms.Button doubleButton;
-        private System.Windows.Forms.Button hitButton;
         public System.Windows.Forms.Button standButton;
         public System.Windows.Forms.NumericUpDown numeric;
         public System.Windows.Forms.TrackBar slider;
+        public System.Windows.Forms.Button hitButton;
     }
 }

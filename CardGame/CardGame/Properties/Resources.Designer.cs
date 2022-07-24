@@ -613,16 +613,6 @@ namespace CardGame.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap dealer {
-            get {
-                object obj = ResourceManager.GetObject("dealer", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap dealer__1_ {
             get {
                 object obj = ResourceManager.GetObject("dealer__1_", resourceCulture);
@@ -633,9 +623,9 @@ namespace CardGame.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap man {
+        internal static System.Drawing.Bitmap dealerman {
             get {
-                object obj = ResourceManager.GetObject("man", resourceCulture);
+                object obj = ResourceManager.GetObject("dealerman", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -643,9 +633,9 @@ namespace CardGame.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap play {
+        internal static System.Drawing.Bitmap man {
             get {
-                object obj = ResourceManager.GetObject("play", resourceCulture);
+                object obj = ResourceManager.GetObject("man", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -666,16 +656,6 @@ namespace CardGame.Properties {
         internal static System.Drawing.Bitmap red_joker {
             get {
                 object obj = ResourceManager.GetObject("red_joker", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap skip {
-            get {
-                object obj = ResourceManager.GetObject("skip", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

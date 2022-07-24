@@ -55,13 +55,13 @@
             this.slider.LargeChange = 100;
             this.slider.Location = new System.Drawing.Point(524, 18);
             this.slider.Maximum = 5000;
-            this.slider.Minimum = 50;
+            this.slider.Minimum = 100;
             this.slider.Name = "slider";
             this.slider.Size = new System.Drawing.Size(265, 45);
             this.slider.SmallChange = 10;
             this.slider.TabIndex = 5;
             this.slider.TickFrequency = 100;
-            this.slider.Value = 50;
+            this.slider.Value = 100;
             this.slider.Scroll += new System.EventHandler(this.slider_Scroll);
             // 
             // numeric
@@ -86,7 +86,7 @@
             this.numeric.Size = new System.Drawing.Size(64, 20);
             this.numeric.TabIndex = 7;
             this.numeric.Value = new decimal(new int[] {
-            50,
+            100,
             0,
             0,
             0});

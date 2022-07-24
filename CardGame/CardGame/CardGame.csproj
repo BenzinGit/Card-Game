@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Black Jack\Controller\BlackJackController.cs" />
+    <Compile Include="Black Jack\Model\CardAdapter.cs" />
     <Compile Include="Black Jack\Model\Player.cs" />
     <Compile Include="Black Jack\View\BlackJackBoardGUI.cs">
       <SubType>UserControl</SubType>
@@ -68,6 +69,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Sound Effects\SoundEffectManager.cs" />
     <Compile Include="Texas Hold%27em\Controller\Controller.cs" />
     <Compile Include="Texas Hold%27em\Controller\TexasHoldemController.cs" />
     <Compile Include="Texas Hold%27em\Model\AI.cs" />
@@ -347,6 +349,8 @@
   <ItemGroup>
     <None Include="Resources\play.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\dealerman.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
