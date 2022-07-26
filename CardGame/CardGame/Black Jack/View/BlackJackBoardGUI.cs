@@ -1,5 +1,6 @@
 ﻿using CardGame.Black_Jack.Controller;
 using CardGame.Black_Jack.Model;
+using CardGame.Sound;
 using CardGame.Texas_Hold_em.Model;
 using System;
 using System.Collections.Generic;
@@ -101,6 +102,7 @@ namespace CardGame.Black_Jack.View
 
         internal void UpdatePlayerBet(Model.Player player)
         {
+            SoundManager.PlaySound("chipdrop"); 
             chipImage.Visible = true;
 
             playerBet.Visible = true; 
@@ -109,8 +111,20 @@ namespace CardGame.Black_Jack.View
 
         }
 
-        internal void ActivateButtons()
+        internal void ActivateButtons(Model.Player player)
         {
+
+            // Cant double down if cash isnt enough
+            if(player.Bet > player.Cash)
+            {
+                playerControlBlackJackGUI.doubleButton.Enabled = false;
+            }
+            else
+            {
+                playerControlBlackJackGUI.doubleButton.Enabled = true;
+
+            }
+
             playerControlBlackJackGUI.standButton.Enabled = true;
             playerControlBlackJackGUI.doubleButton.Text = "Double down"; 
             playerControlBlackJackGUI.hitButton.Enabled = true; 
@@ -130,6 +144,8 @@ namespace CardGame.Black_Jack.View
             dealerValue.Visible = false; 
             chipImage.Visible = false;  
             playerBet.Visible = false;
+          
+            
             foreach (var card in playerCards)
             {
                 card.Visible = false; 
@@ -145,11 +161,23 @@ namespace CardGame.Black_Jack.View
 
         }
 
+        internal void UpdateMaxBet(int cash)
+        {
+            playerControlBlackJackGUI.slider.Maximum = cash;
+            playerControlBlackJackGUI.numeric.Maximum = cash; 
+        }
 
         internal void ResetChoice()
         {
             playerControlBlackJackGUI.Choice = 0;  
 
+        }
+
+        internal void ShowGameOver()
+        {
+            messageLabel.ForeColor = Color.Red;
+            messageLabel.Visible = true; 
+            messageLabel.Text = "No Cash Left"; 
         }
 
         internal int GetPlayerBet()
@@ -168,12 +196,31 @@ namespace CardGame.Black_Jack.View
 
         }
 
+        internal void ShowVictoryMessage(string text)
+        {
+            messageLabel.Visible = true;
+
+            messageLabel.Text = text;
+            messageLabel.ForeColor = Color.LimeGreen;
+
+            SoundManager.PlaySound("win"); 
+        }
+
+
         internal void ShowMessage(string text)
         { 
             messageLabel.Visible = true; 
             messageLabel.Text = text;   
         }
 
+        internal void ShowLoseMessage(string text)
+        {
+            messageLabel.Visible = true;
 
+            messageLabel.Text = text;
+            messageLabel.ForeColor = Color.Red;
+
+            SoundManager.PlaySound("lose");
+        }
     }
 }

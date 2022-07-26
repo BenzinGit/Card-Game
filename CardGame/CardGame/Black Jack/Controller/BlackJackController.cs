@@ -1,5 +1,6 @@
 ﻿using CardGame.Black_Jack.Model;
 using CardGame.Black_Jack.View;
+using CardGame.Sound;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -16,12 +17,13 @@ namespace CardGame.Black_Jack.Controller
         private Player player;
         private Deck deck;
         private BlackJackBoardGUI view;
-
-
+       
+        
+        private int startingCash = 5000; 
         private int waitTime = 1000; 
         public BlackJackController(BlackJackBoardGUI view)
         {
-            this.view = view; 
+            this.view = view;
         }
         
 
@@ -44,8 +46,7 @@ namespace CardGame.Black_Jack.Controller
             dealer = new Player();
             player = new Player();
 
-            player.Cash = 5000;
-            view.UpdatePlayerBet(player); 
+            player.Cash = startingCash;
         }
 
       
@@ -76,7 +77,7 @@ namespace CardGame.Black_Jack.Controller
                     hasBet = true;  
                 }
             }
-
+            
             player.PlaceBet(choice); 
         }
 
@@ -88,7 +89,7 @@ namespace CardGame.Black_Jack.Controller
 
 
             view.HideDealerCard();
-            view.ActivateButtons();
+            view.ActivateButtons(player);
 
 
         }
@@ -113,6 +114,8 @@ namespace CardGame.Black_Jack.Controller
             dealer.AddCard(deck.DrawCard());
             view.DisplayCards(null, dealer.Cards);
             view.DisplayDealerValue(dealer.CardValue);
+            SoundManager.PlaySound("cardflip");
+
         }
 
         private void DealCardPlayer()
@@ -120,7 +123,8 @@ namespace CardGame.Black_Jack.Controller
 
             player.AddCard(deck.DrawCard());
             view.DisplayCards(player.Cards, null);
-            view.DisplayPlayerValue(player.CardValue); 
+            view.DisplayPlayerValue(player.CardValue);
+            SoundManager.PlaySound("cardflip");
 
         }
 
@@ -179,14 +183,22 @@ namespace CardGame.Black_Jack.Controller
 
         }
 
-        private void ResetRound()
+        private bool ResetRound()
         {
-
+         
             player.Cards.Clear();
             dealer.Cards.Clear();
             deck = new Deck();
 
-            view.ResetView(); 
+            view.ResetView();
+            view.UpdateMaxBet(player.Cash);
+
+            if (player.Cash < 50)
+            {
+                return false;
+            }
+
+            return true; 
         }
 
         public void PlayGame()
@@ -195,7 +207,14 @@ namespace CardGame.Black_Jack.Controller
 
             while (true)
             {
-                ResetRound(); 
+                var hasCashLeft = ResetRound(); 
+
+                if (!hasCashLeft)
+                {
+                    view.ShowGameOver(); 
+                    return; 
+                }    
+
                 GetPlayerBet();
                 view.UpdatePlayerBet(player); 
                 deck.Shuffle();
@@ -209,7 +228,7 @@ namespace CardGame.Black_Jack.Controller
                 if(playerCardValue > 21)
                 {
                     view.LockControls();
-                    view.ShowMessage("Bust!");
+                    view.ShowLoseMessage("Bust!");
                     view.messageLabel.ForeColor = Color.OrangeRed;
 
                     player.Lose();
@@ -222,23 +241,21 @@ namespace CardGame.Black_Jack.Controller
                     DealerPlay(); 
                     if(dealer.CardValue > 21)
                     {
-                        view.ShowMessage("Dealer bust!");
-                        view.messageLabel.ForeColor = Color.Lime;
+                        view.ShowVictoryMessage("You win!");
                         player.Win();
 
                     }
                     else if (dealer.CardValue > player.CardValue)
                     {
-                        view.ShowMessage("Dealer wins!");
+                        view.ShowLoseMessage("Dealer wins!"); 
                         view.messageLabel.ForeColor = Color.OrangeRed;
 
                         player.Lose(); 
                     }
                     else if(dealer.CardValue < player.CardValue)
                     {
-                        view.messageLabel.ForeColor = Color.Lime;
 
-                        view.ShowMessage("Player wins!");
+                        view.ShowVictoryMessage("You win!"); 
                         player.Win(); 
 
                     }

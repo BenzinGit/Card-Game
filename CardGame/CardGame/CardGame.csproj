@@ -35,6 +35,9 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -69,7 +72,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Sound Effects\SoundEffectManager.cs" />
+    <Compile Include="Sound\SoundManager.cs" />
     <Compile Include="Texas Hold%27em\Controller\Controller.cs" />
     <Compile Include="Texas Hold%27em\Controller\TexasHoldemController.cs" />
     <Compile Include="Texas Hold%27em\Model\AI.cs" />
@@ -351,6 +354,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\dealerman.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Sound\SoundEffects\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="favicon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

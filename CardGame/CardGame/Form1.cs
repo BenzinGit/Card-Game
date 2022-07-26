@@ -38,6 +38,16 @@ namespace CardGame
             blackJackBoardGUI1.Visible = true;  
             texasButton.Visible = false;
             blackButton.Visible = false;
+
+        }
+
+        private void blackButton_Click_1(object sender, EventArgs e)
+        {
+
+            blackJackBoardGUI1.Visible = true; 
+            texasButton.Visible = false;
+            blackButton.Visible = false;
+
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CardGame.Black_Jack.Controller;
+using CardGame.Sound;
 using CardGame.Texas_Hold_em.Controller;
 using CardGame.Texas_Hold_em.Model;
 using CardGame.Texas_Hold_em.Testing;
@@ -290,8 +291,9 @@ namespace CardGame.View
 
         private void PlaySound(string soundEffect)
         {
-            SoundPlayer simpleSound = new SoundPlayer("../../Sounds/"+soundEffect+".wav");
-            simpleSound.Play();
+
+            SoundManager.PlaySound(soundEffect);
+            
 
         }
 
