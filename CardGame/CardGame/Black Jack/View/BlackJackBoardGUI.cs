@@ -46,6 +46,12 @@ namespace CardGame.Black_Jack.View
 
         }
 
+        internal void Reset()
+        {
+            controller = new BlackJackController(this);
+
+        }
+
         internal void DisplayDealerValue(int dealer)
         {
             dealerValue.Visible = true;
@@ -66,6 +72,11 @@ namespace CardGame.Black_Jack.View
             button1.Visible = false;
             playerControlBlackJackGUI.Visible = true; 
             controller.PlayGame(); 
+        }
+
+        internal void SaveStats()
+        {
+            controller.SaveStats(); 
         }
 
         internal void HideDealerCard()

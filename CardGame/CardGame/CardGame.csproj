@@ -67,13 +67,13 @@
     <Compile Include="Black Jack\View\PlayerControlBlackJackGUI.Designer.cs">
       <DependentUpon>PlayerControlBlackJackGUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="Point System\PointManager.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Sound\SoundManager.cs" />
-    <Compile Include="Texas Hold%27em\Controller\Controller.cs" />
     <Compile Include="Texas Hold%27em\Controller\TexasHoldemController.cs" />
     <Compile Include="Texas Hold%27em\Model\AI.cs" />
     <Compile Include="Texas Hold%27em\Model\CardEvaluator.cs" />
@@ -144,6 +144,7 @@
     <EmbeddedResource Include="Texas Hold%27em\View\PokerBoardGUI.resx">
       <DependentUpon>PokerBoardGUI.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="ClassDiagram.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

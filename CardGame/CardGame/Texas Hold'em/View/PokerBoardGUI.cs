@@ -20,8 +20,6 @@ namespace CardGame.View
     public partial class TexasHoldem : UserControl
     {
 
-        private Controller controller;
-
         private TexasHoldemController texasController;
         private List<PlayerGUI> playerList; 
         
@@ -30,13 +28,11 @@ namespace CardGame.View
             InitializeComponent();
 
             SetUpPlayerGUI();
-           // controller = new Controller(this);
-        //    TestingController Tcontroller = new TestingController();
-        //     Tcontroller.RunTest(); 
             texasController = new TexasHoldemController(this);
+
         }
 
-        
+
 
         public void SetUpPlayerGUI()
         {
@@ -47,6 +43,16 @@ namespace CardGame.View
             playerList.Add(playerGUI2);
             playerList.Add(playerGUI3);
             playerList.Add(playerGUI4);
+
+        }
+
+        internal void Reset()
+        {
+            
+            texasController = new TexasHoldemController(this);
+            startButton.Visible = true;
+            texasController.SetUpGame();
+
 
         }
 
@@ -68,6 +74,11 @@ namespace CardGame.View
             PlaySound("cardflip"); 
            community.setFlop(card1, card2, card3); 
 
+        }
+
+        internal void SaveStats()
+        {
+            texasController.SaveStats(); 
         }
 
         public void HidePlayerCards()
@@ -227,23 +238,7 @@ namespace CardGame.View
         }
 
 
-        public void UpdateBoard()
-        {
-            int i = 0;
-            foreach (var player in playerList)
-            {
-                playerList[i].setCash(controller.getPlayerCash(i));
-                playerList[i].setBet(controller.getPlayerBet(i));
-
-                i++; 
-
-
-            }
-
-            community.setPot(controller.getPot()); 
-
-
-        }
+       
 
         internal void ChangeButtons(Boolean b, int cashToCall)
         {
@@ -286,7 +281,9 @@ namespace CardGame.View
           
             startButton.Visible = false;
             texasController.PlayGame();
-          
+            playerControlGUI.Visible = true;
+
+
         }
 
         private void PlaySound(string soundEffect)
@@ -319,16 +316,6 @@ namespace CardGame.View
             }
         }
 
-        public void Skip()
-        {
-
-            controller.SetWaitTime(0); 
-        }
-
-        internal void PlayNormalSpeed()
-        {
-            controller.SetWaitTime(1000);
-
-        }
+      
     }
 }

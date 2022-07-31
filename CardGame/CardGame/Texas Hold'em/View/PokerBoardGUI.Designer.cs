@@ -40,9 +40,10 @@
             // startButton
             // 
             this.startButton.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.startButton.Location = new System.Drawing.Point(480, 254);
+            this.startButton.Font = new System.Drawing.Font("Niagara Engraved", 21.75F);
+            this.startButton.Location = new System.Drawing.Point(471, 254);
             this.startButton.Name = "startButton";
-            this.startButton.Size = new System.Drawing.Size(145, 46);
+            this.startButton.Size = new System.Drawing.Size(182, 46);
             this.startButton.TabIndex = 8;
             this.startButton.Text = "Start Game";
             this.startButton.UseVisualStyleBackColor = true;
@@ -60,6 +61,7 @@
             // 
             this.playerGUI4.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.playerGUI4.BackColor = System.Drawing.Color.Transparent;
+            this.playerGUI4.Id = 0;
             this.playerGUI4.Location = new System.Drawing.Point(923, 254);
             this.playerGUI4.Name = "playerGUI4";
             this.playerGUI4.Size = new System.Drawing.Size(173, 157);
@@ -69,6 +71,7 @@
             // 
             this.playerGUI3.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.playerGUI3.BackColor = System.Drawing.Color.Transparent;
+            this.playerGUI3.Id = 0;
             this.playerGUI3.Location = new System.Drawing.Point(439, 3);
             this.playerGUI3.Name = "playerGUI3";
             this.playerGUI3.Size = new System.Drawing.Size(173, 164);
@@ -78,6 +81,7 @@
             // 
             this.playerGUI2.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.playerGUI2.BackColor = System.Drawing.Color.Transparent;
+            this.playerGUI2.Id = 0;
             this.playerGUI2.Location = new System.Drawing.Point(19, 243);
             this.playerGUI2.Name = "playerGUI2";
             this.playerGUI2.Size = new System.Drawing.Size(173, 168);
@@ -87,6 +91,7 @@
             // 
             this.playerGUI1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.playerGUI1.BackColor = System.Drawing.Color.Transparent;
+            this.playerGUI1.Id = 0;
             this.playerGUI1.Location = new System.Drawing.Point(430, 387);
             this.playerGUI1.Name = "playerGUI1";
             this.playerGUI1.Size = new System.Drawing.Size(173, 169);

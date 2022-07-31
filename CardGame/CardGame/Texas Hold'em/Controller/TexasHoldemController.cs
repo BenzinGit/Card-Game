@@ -1,4 +1,5 @@
-﻿using CardGame.Texas_Hold_em.Model;
+﻿using CardGame.Point_System;
+using CardGame.Texas_Hold_em.Model;
 using CardGame.View;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace CardGame.Texas_Hold_em.Controller
 
         private TexasHoldem view;
 
-
+        private int points; 
         private int startingCash = 5000;
         private int bigBlind = 50;
         private int smallBlind = 25;
@@ -37,6 +38,8 @@ namespace CardGame.Texas_Hold_em.Controller
             activePlayers = new List<Player>(); 
             sharedCards = new SharedCards();    
             this.view = view;
+
+
         }
 
         public void PlayGame()
@@ -65,11 +68,17 @@ namespace CardGame.Texas_Hold_em.Controller
                 currentPlayer = GetNextPlayer(currentDealer);
                 DrawRiver(); 
                 PlayBettingRound();
-                showAllPlayerCards();
+                showAllPlayerCards(
+                    );
 
                 var winners = CardEvaluator.DecideWinner(activePlayers, sharedCards.GetCards());
                 view.DisplayEndHands(players);
                 AwardPot(winners);
+
+                if (winners.Contains(players[0]))
+                {
+                    points = points + (players[0].EndHand.HandValue * 10);
+                }
 
                 view.UpdatePlayers(players);
                 view.HighlightWinners(winners);
@@ -80,8 +89,11 @@ namespace CardGame.Texas_Hold_em.Controller
 
         }
 
-
-
+        internal void SaveStats()
+        {
+            if (players.Count > 0)
+            PointManager.SavePoints(points, players[0].Cash); 
+        }
 
         private void ResetRound()
         {
@@ -485,6 +497,9 @@ namespace CardGame.Texas_Hold_em.Controller
                 player.Cash = startingCash; 
             }
 
+            var v = PointManager.ReadPoints();
+            players[0].Cash = v.Item2;
+            points = v.Item1; 
             view.SetUpGame(players);
             view.UpdatePlayers(players);
 

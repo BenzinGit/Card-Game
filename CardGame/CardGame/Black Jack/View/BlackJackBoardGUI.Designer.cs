@@ -91,9 +91,8 @@
             this.playerCash.ForeColor = System.Drawing.Color.Lime;
             this.playerCash.Location = new System.Drawing.Point(379, 495);
             this.playerCash.Name = "playerCash";
-            this.playerCash.Size = new System.Drawing.Size(60, 23);
+            this.playerCash.Size = new System.Drawing.Size(0, 23);
             this.playerCash.TabIndex = 33;
-            this.playerCash.Text = "$5000";
             // 
             // playerBet
             // 
@@ -122,11 +121,12 @@
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button1.Location = new System.Drawing.Point(479, 256);
+            this.button1.Font = new System.Drawing.Font("Niagara Engraved", 21.75F);
+            this.button1.Location = new System.Drawing.Point(463, 256);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(110, 43);
+            this.button1.Size = new System.Drawing.Size(137, 43);
             this.button1.TabIndex = 48;
-            this.button1.Text = "Play Game";
+            this.button1.Text = "Start Game";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -135,7 +135,7 @@
             this.messageLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.messageLabel.Font = new System.Drawing.Font("Calibri", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.messageLabel.ForeColor = System.Drawing.Color.Yellow;
-            this.messageLabel.Location = new System.Drawing.Point(330, 257);
+            this.messageLabel.Location = new System.Drawing.Point(362, 257);
             this.messageLabel.Name = "messageLabel";
             this.messageLabel.Size = new System.Drawing.Size(362, 42);
             this.messageLabel.TabIndex = 49;
@@ -217,7 +217,7 @@
             // 
             this.playerCard4.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.playerCard4.Image = global::CardGame.Properties.Resources._4_of_hearts;
-            this.playerCard4.Location = new System.Drawing.Point(509, 415);
+            this.playerCard4.Location = new System.Drawing.Point(504, 415);
             this.playerCard4.Name = "playerCard4";
             this.playerCard4.Size = new System.Drawing.Size(64, 114);
             this.playerCard4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -283,6 +283,7 @@
             this.dealerCard2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.dealerCard2.TabIndex = 40;
             this.dealerCard2.TabStop = false;
+            this.dealerCard2.Visible = false;
             // 
             // dealerCard1
             // 
@@ -294,6 +295,7 @@
             this.dealerCard1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.dealerCard1.TabIndex = 35;
             this.dealerCard1.TabStop = false;
+            this.dealerCard1.Visible = false;
             // 
             // chipImage
             // 
@@ -310,7 +312,7 @@
             // 
             this.playerCard3.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.playerCard3.Image = global::CardGame.Properties.Resources._4_of_hearts;
-            this.playerCard3.Location = new System.Drawing.Point(492, 415);
+            this.playerCard3.Location = new System.Drawing.Point(491, 415);
             this.playerCard3.Name = "playerCard3";
             this.playerCard3.Size = new System.Drawing.Size(64, 114);
             this.playerCard3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -358,6 +360,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DarkGreen;
+            this.Controls.Add(this.playerCard4);
             this.Controls.Add(this.pictureBox4);
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.messageLabel);
@@ -365,7 +368,6 @@
             this.Controls.Add(this.playerCard7);
             this.Controls.Add(this.playerCard6);
             this.Controls.Add(this.playerCard5);
-            this.Controls.Add(this.playerCard4);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dealerValue);
             this.Controls.Add(this.playerBet);

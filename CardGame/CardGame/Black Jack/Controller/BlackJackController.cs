@@ -1,5 +1,6 @@
 ﻿using CardGame.Black_Jack.Model;
 using CardGame.Black_Jack.View;
+using CardGame.Point_System;
 using CardGame.Sound;
 using System;
 using System.Collections.Generic;
@@ -17,19 +18,22 @@ namespace CardGame.Black_Jack.Controller
         private Player player;
         private Deck deck;
         private BlackJackBoardGUI view;
-       
+        private int points; 
         
-        private int startingCash = 5000; 
+        private int startingCash; 
         private int waitTime = 1000; 
         public BlackJackController(BlackJackBoardGUI view)
         {
             this.view = view;
-        }
-        
 
-        
-        
-        
+         
+
+        }
+
+
+
+
+
         private void DealCards()
         {
            
@@ -47,6 +51,8 @@ namespace CardGame.Black_Jack.Controller
             player = new Player();
 
             player.Cash = startingCash;
+
+            view.UpdatePlayerBet(player); 
         }
 
       
@@ -91,6 +97,13 @@ namespace CardGame.Black_Jack.Controller
             view.HideDealerCard();
             view.ActivateButtons(player);
 
+
+        }
+
+        internal void SaveStats()
+        {
+            if(player != null)
+            PointManager.SavePoints(points, player.Cash);
 
         }
 
@@ -201,8 +214,17 @@ namespace CardGame.Black_Jack.Controller
             return true; 
         }
 
+
+       
+
         public void PlayGame()
         {
+            var v = PointManager.ReadPoints();
+
+
+            startingCash = v.Item2;
+            points = v.Item1;
+
             SetUpGame();
 
             while (true)
@@ -241,6 +263,8 @@ namespace CardGame.Black_Jack.Controller
                     DealerPlay(); 
                     if(dealer.CardValue > 21)
                     {
+                        points = points + 20; 
+
                         view.ShowVictoryMessage("You win!");
                         player.Win();
 
@@ -254,6 +278,17 @@ namespace CardGame.Black_Jack.Controller
                     }
                     else if(dealer.CardValue < player.CardValue)
                     {
+                        if(player.CardValue == 21)
+                        {                        
+                            points = points + 40;
+
+
+                        }
+                        else
+                        {
+                            points = points + 20;
+
+                        }
 
                         view.ShowVictoryMessage("You win!"); 
                         player.Win(); 
