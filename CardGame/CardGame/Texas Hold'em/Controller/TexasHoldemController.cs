@@ -486,7 +486,7 @@ namespace CardGame.Texas_Hold_em.Controller
             players.Add(new Player("Johnny", 1));
             players.Add(new Player("Steve", 2));
             players.Add(new Player("Bob", 3));
-            
+
             // Setup bots personalites
             players[0].Ai = null;
 

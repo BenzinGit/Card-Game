@@ -34,8 +34,10 @@ namespace CardGame.Texas_Hold_em.Model
                 Console.WriteLine(player.Name + ": " + chanceOfWinning);
 
                 int choice = 1; 
+
                 if(chanceOfWinning > 30 + random.Next(1, 20))
                 {
+                    if(player.Cash > 0)
                     choice = (int)(((player.Cash / 20) * (chanceOfWinning / 10)) / 2) + (cashToCall);
 
                 }
@@ -47,7 +49,8 @@ namespace CardGame.Texas_Hold_em.Model
                         if(random.Next(1, 10) == 5)
                         {
                             Console.WriteLine(player.Name + " is bluffing");
-                            choice = (int)(((player.Cash / 20) * (random.Next(10, 90) / 10))) + (cashToCall);
+                                if (player.Cash > 0)
+                                choice = (int)(((player.Cash / 20) * (random.Next(10, 90) / 10))) + (cashToCall);
                         }
                         else
                         {
@@ -68,6 +71,7 @@ namespace CardGame.Texas_Hold_em.Model
                     if (random.Next(1, 10) == 5)
                     {
                         Console.WriteLine(player.Name + " is bluffing");
+                        if (player.Cash > 0)
                         choice = (int)(((player.Cash / 20) * (random.Next(10, 90) / 10))) + (cashToCall);
                     }
 

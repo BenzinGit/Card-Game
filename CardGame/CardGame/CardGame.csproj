@@ -81,7 +81,6 @@
     <Compile Include="Deck\Suit.cs" />
     <Compile Include="Texas Hold%27em\Model\HoleCards.cs" />
     <Compile Include="Texas Hold%27em\Model\Player.cs" />
-    <Compile Include="Texas Hold%27em\Model\Pot.cs" />
     <Compile Include="Texas Hold%27em\Model\SharedCards.cs" />
     <Compile Include="Texas Hold%27em\Testing\TestingController.cs" />
     <Compile Include="Texas Hold%27em\View\CommunityGUI.cs">

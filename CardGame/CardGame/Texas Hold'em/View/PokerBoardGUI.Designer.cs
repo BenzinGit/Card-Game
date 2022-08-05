@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.startButton = new System.Windows.Forms.Button();
+            this.playerControlGUI = new CardGame.Texas_Hold_em.View.PlayerControlGUI();
             this.community = new CardGame.Texas_Hold_em.View.community();
             this.playerGUI4 = new CardGame.Texas_Hold_em.View.PlayerGUI();
             this.playerGUI3 = new CardGame.Texas_Hold_em.View.PlayerGUI();
             this.playerGUI2 = new CardGame.Texas_Hold_em.View.PlayerGUI();
             this.playerGUI1 = new CardGame.Texas_Hold_em.View.PlayerGUI();
-            this.playerControlGUI = new CardGame.Texas_Hold_em.View.PlayerControlGUI();
             this.SuspendLayout();
             // 
             // startButton
@@ -48,6 +48,16 @@
             this.startButton.Text = "Start Game";
             this.startButton.UseVisualStyleBackColor = true;
             this.startButton.Click += new System.EventHandler(this.startButton_Click);
+            // 
+            // playerControlGUI
+            // 
+            this.playerControlGUI.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.playerControlGUI.BackColor = System.Drawing.SystemColors.Control;
+            this.playerControlGUI.Choice = 0;
+            this.playerControlGUI.Location = new System.Drawing.Point(0, 557);
+            this.playerControlGUI.Name = "playerControlGUI";
+            this.playerControlGUI.Size = new System.Drawing.Size(1096, 74);
+            this.playerControlGUI.TabIndex = 9;
             // 
             // community
             // 
@@ -96,16 +106,6 @@
             this.playerGUI1.Name = "playerGUI1";
             this.playerGUI1.Size = new System.Drawing.Size(173, 169);
             this.playerGUI1.TabIndex = 0;
-            // 
-            // playerControlGUI
-            // 
-            this.playerControlGUI.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.playerControlGUI.BackColor = System.Drawing.SystemColors.Control;
-            this.playerControlGUI.Choice = 0;
-            this.playerControlGUI.Location = new System.Drawing.Point(0, 557);
-            this.playerControlGUI.Name = "playerControlGUI";
-            this.playerControlGUI.Size = new System.Drawing.Size(1096, 74);
-            this.playerControlGUI.TabIndex = 9;
             // 
             // TexasHoldem
             // 
